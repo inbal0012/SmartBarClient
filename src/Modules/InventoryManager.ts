@@ -1,27 +1,36 @@
 import DbMuck from '../DBMuck';
 import EInventoryCategory from '../Enums/EInventoryCategory';
-import EInventoryStatus from '../Enums/EInventoryStatus';
 import BottleBuilder, { Bottle } from './InventoryItemModules/Bottle';
 import FruitVegetable from './InventoryItemModules/FruitVegetable';
 import InventoryItem, {
   NullInventoryItem,
 } from './InventoryItemModules/InventoryItem';
-import React from 'react';
+import AbstractInventoryItem from './InventoryItemModules/AbstractInventoryItem';
 
 class InventoryManager {
-  inventory;
+  private static instance: InventoryManager;
+  inventory: AbstractInventoryItem[] = [];
 
-  constructor() {
+  private constructor() {
     //this.inventory = [];
     this.fetchData();
   }
+
+  public static getInstance(): InventoryManager {
+    if (!InventoryManager.instance) {
+      InventoryManager.instance = new InventoryManager();
+    }
+
+    return InventoryManager.instance;
+  }
+
   //#region Database
   connectDatabase() {
     // TODO
   }
 
   fetchData() {
-    this.inventory = DbMuck.inventory;
+    this.inventory = DbMuck.getInstance().inventory;
   }
 
   updateDatabase() {
@@ -29,14 +38,14 @@ class InventoryManager {
   }
   //#endregion database
 
-  getIngredient(name) {
+  getIngredient(name: string) {
     var result = this.inventory.find((item) => item.name === name);
     if (result === undefined) {
       return new NullInventoryItem();
     } else return result;
   }
 
-  checkIfIsCategory(category) {
+  checkIfIsCategory(category: string) {
     return (
       Object.values(EInventoryCategory).includes(category) ||
       Object.values(EInventoryCategory.BottleCategory).includes(category) ||
@@ -46,7 +55,7 @@ class InventoryManager {
     );
   }
 
-  updateIngredient(ingredientName, ingredientParam, newValue) {
+  updateIngredient(ingredientName: string, ingredientParam: string, newValue: any) {
     var ingredient = this.inventory.find(
       (item) => item.name === ingredientName
     );
@@ -76,7 +85,7 @@ class InventoryManager {
               newValue,
           };
         else {
-          ingredient.Use(newValue);
+          ingredient.use(newValue);
           return {
             success: true,
             reason: ingredientName + 'used',
@@ -93,11 +102,11 @@ class InventoryManager {
   }
 
   addIngredient(
-    name,
-    category,
-    remaining,
-    minRequired,
-    { alcoholPercentage } = {}
+    name: string,
+    category: string,
+    remaining: number,
+    minRequired: number,
+    alcoholPercentage: number = 0
   ) {
     if (!this.checkIfIsCategory(category))
       return { success: false, reason: 'please select a valid category' };
@@ -106,9 +115,10 @@ class InventoryManager {
     }
     var newIngredient;
     if (Bottle.isABottleCategory(category)) {
-      newIngredient = new BottleBuilder(name, category, remaining, minRequired)
-        .alcoholPercentage(alcoholPercentage)
-        .build();
+      var builder = new BottleBuilder(name, category, remaining, minRequired);
+      if (Bottle.isAAlcoholCategory(category))
+        builder.alcoholPercentage(alcoholPercentage);
+      newIngredient = builder.build();
     } else if (
       category === EInventoryCategory.Fruits ||
       category === EInventoryCategory.Vegetables
@@ -135,19 +145,26 @@ class InventoryManager {
   }
 
   toString() {
-    return (
-      <div>
-        <h3>Inventory</h3>
-        <ul>
-          {this.inventory.map((item) => (
-            <li>{item.toString()}</li>
-          ))}
-        </ul>
-      </div>
-    );
+    // return (
+    //   <div>
+    //   <h3>Inventory < /h3>
+    //   < ul >
+    //   {
+    //     this.inventory.map((item) => (
+    //       <li>{ item.toString() } < /li>
+    //     ))
+    //   }
+    //   < /ul>
+    //   < /div>
+    // );
+    return "";
   }
 
-  filterByCategory(targetCategory) {
+  toJson() {
+    return JSON.stringify(this);
+  }
+
+  filterByCategory(targetCategory: string) {
     return this.inventory.filter((item) => item.category === targetCategory);
   }
 }

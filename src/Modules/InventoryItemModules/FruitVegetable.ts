@@ -3,11 +3,9 @@ import EInventoryStatus from '../../Enums/EInventoryStatus';
 import AbstractInventoryItem from './AbstractInventoryItem';
 
 class FruitVegetable extends AbstractInventoryItem {
-  parts = ['peel', 'juice'];
-  remaining;
   minRequired;
 
-  constructor(name, category, remaining, minRequired) {
+  constructor(name: string, category: string, remaining: number, minRequired: number) {
     if (
       category === EInventoryCategory.Fruits ||
       category === EInventoryCategory.Vegetables
@@ -29,26 +27,34 @@ class FruitVegetable extends AbstractInventoryItem {
     else this.status = EInventoryStatus.Empty;
   }
   toString() {
-    return (
-      <li>
-        {this.name}
-        <ul>
-          <li>Type: {this.category}</li>
-          <li>Status: {this.status}</li>
-          <li>{this.remaining} left</li>
-          <li>min required: {this.minRequired}</li>
-        </ul>
-      </li>
-    );
+    // return (
+    //   <li>
+    //     {this.name}
+    //     <ul>
+    //       <li>Type: {this.category}</li>
+    //       <li>Status: {this.status}</li>
+    //       <li>{this.remaining} left</li>
+    //       <li>min required: {this.minRequired}</li>
+    //     </ul>
+    //   </li>
+    // );
+    return "";
   }
-  Use(amountUsed) {
+  
+  toJson() {
+    JSON.stringify(this);
+  }
+
+  use(amountUsed: number) {
     this.remaining -= amountUsed;
     this.updateStatus();
   }
-  Check(amountNeeded) {
+
+  checkAvailability(amountNeeded: number) {
     return this.remaining > amountNeeded;
   }
-  updateCategory(newCategory) {
+
+  updateCategory(newCategory: string) {
     if (newCategory === this.category) return;
     if (
       newCategory === EInventoryCategory.Fruits ||

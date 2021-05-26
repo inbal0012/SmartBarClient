@@ -1,18 +1,24 @@
 import EInventoryCategory from './Enums/EInventoryCategory';
+import AbstractInventoryItem from './Modules/InventoryItemModules/AbstractInventoryItem';
 import BottleBuilder from './Modules/InventoryItemModules/Bottle';
 import FruitVegetable from './Modules/InventoryItemModules/FruitVegetable';
 import { NullInventoryItem } from './Modules/InventoryItemModules/InventoryItem';
 import Recipe from './Modules/Recipe';
 
 class DBMuck {
-  inventory;
-  recipeList;
+  private static instance: DBMuck;
+  inventory: AbstractInventoryItem[] = [];
+  recipeList: Recipe[] = [];
 
-  constructor() {
-    if (DBMuck.instance == null) {
+  private constructor() {
       this.initInventory();
-      DBMuck.instance = this;
+  }
+
+  public static getInstance(): DBMuck {
+    if (!DBMuck.instance) {
+      DBMuck.instance = new DBMuck();
     }
+
     return DBMuck.instance;
   }
 
@@ -53,15 +59,15 @@ class DBMuck {
       console.log(error);
     }
   }
-  getItemByName(name) {
-    var item = this.inventory.find((item) => item.getName() === name);
-    if (item === undefined) {
-      item = this.inventory.find((item) => item.getCategory() === name);
-      if (item === undefined) item = new NullInventoryItem();
+  getIngredientByName(name: string) {
+    var ingredient = this.inventory.find((item) => item.getName() === name);
+    if (ingredient === undefined) {
+      ingredient = this.inventory.find((item) => item.getCategory() === name);
+      if (ingredient === undefined) ingredient = new NullInventoryItem();
     }
-    return item;
+    return ingredient;
   }
-  addItem(item) {
+  addItem(item: AbstractInventoryItem) {
     this.inventory.push(item);
     this.inventory.sort(function (a, b) {
       if (a.getName() < b.getName()) return -1;
@@ -74,6 +80,4 @@ class DBMuck {
   //#endregion Recipes
 }
 
-const DbMuck = new DBMuck();
-Object.freeze(DbMuck);
-export default DbMuck;
+export default DBMuck;

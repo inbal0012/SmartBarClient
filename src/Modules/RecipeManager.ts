@@ -1,36 +1,58 @@
 import DbMuck from '../DBMuck';
 import EInventoryCategory from '../Enums/EInventoryCategory';
+import AbstractInventoryItem from './InventoryItemModules/AbstractInventoryItem';
 import InventoryItem from './InventoryItemModules/InventoryItem';
 import Recipe from './Recipe';
 
 class RecipeManager {
-  recipeList;
+  private static instance: RecipeManager;
+  recipeList: Recipe[];
+  isDBRecipeUpdateRequired: boolean;
 
-  constructor() {
-    if (RecipeManager.instance == null) {
-      //this.recipeList = [];
+  private constructor() {
       this.recipeList = [];
       this.isDBRecipeUpdateRequired = false;
       RecipeManager.instance = this;
+  }
+  
+  public static getInstance(): RecipeManager {
+    if (!RecipeManager.instance) {
+      RecipeManager.instance = new RecipeManager();
     }
+
     return RecipeManager.instance;
   }
 
-  getRecipe(name) {
-    return this.recipeManager.recipeList.find((recipe) => recipe.name === name);
+  //#region Database
+  connectDatabase() {
+    // TODO
   }
 
-  addRecipe(name, ingredients, method, portion) {
+  fetchData() {
+    this.recipeList = DbMuck.getInstance().recipeList;
+  }
+
+  updateDatabase() {
+    // TODO
+  }
+  //#endregion database
+
+
+  getRecipe(name: string) {
+    return this.recipeList.find((recipe) => recipe.name === name);
+  }
+
+  addRecipe(name: string, ingredients: [number, string][], method: string[], portion: number) {
     if (this.recipeList.find((rcp) => rcp.name === name)) return;
     var newIngredients = this.extractIngredients(ingredients);
     this.recipeList.push(new Recipe(name, newIngredients, method, portion));
     this.isDBRecipeUpdateRequired = true;
   }
 
-  extractIngredients(ingredients) {
-    var newIngredients = [];
+  extractIngredients(ingredients: [number, string][]) {
+    var newIngredients: [number, AbstractInventoryItem][] = [];
     ingredients.forEach((element) => {
-      var item = DbMuck.getItemByName(element[1]);
+      var item = DbMuck.getInstance().getIngredientByName(element[1]);
       if (item.getName() !== 'Unavailable') {
         newIngredients.push([element[0], item]);
       } else {
@@ -40,14 +62,14 @@ class RecipeManager {
           0,
           0
         );
-        DbMuck.addItem(newItem);
+        DbMuck.getInstance().addItem(newItem);
         newIngredients.push([element[0], newItem]);
       }
     });
     return newIngredients;
   }
 
-  MakeCocktailByName(name) {
+  MakeCocktailByName(name: string) {
     console.log('make cocktail ' + name);
     var recipe = this.recipeList.find((recipe) => recipe.name === name);
     if (recipe !== undefined) return this.MakeCocktail(recipe);
@@ -58,8 +80,7 @@ class RecipeManager {
       };
   }
 
-  MakeCocktail(recipe) {
-    if (!recipe instanceof Recipe) return;
+  MakeCocktail(recipe: Recipe) {
     if (!recipe.checkAvailability()) {
       return {
         success: false,
@@ -67,7 +88,7 @@ class RecipeManager {
       };
     }
     recipe.ingredients.forEach((element) => {
-      element[1].Use(element[0]);
+      element[1].use(element[0]);
     });
     return {
       success: true,
@@ -76,5 +97,4 @@ class RecipeManager {
   }
 }
 
-const recipeManager = new RecipeManager();
-export default recipeManager;
+export default RecipeManager;

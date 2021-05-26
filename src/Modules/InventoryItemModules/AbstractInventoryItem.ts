@@ -30,7 +30,7 @@ export default abstract class AbstractInventoryItem {
     abstract updateStatus(): void;
     abstract toString(): string;
     abstract toJson(): any;
-    abstract Use(amountUsed: number):void
-    abstract Check(amountNeeded: number) : boolean;
+    abstract use(amountUsed: number):void
+    abstract checkAvailability(amountNeeded: number) : boolean;
     abstract updateCategory(newCategory: string): void;
 }

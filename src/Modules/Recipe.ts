@@ -33,7 +33,7 @@ class Recipe {
         this.ingredients.forEach(ingredient => {
             console.log(ingredient[1]);
 
-            if (!ingredient[1].Check(ingredient[0])) {
+            if (!ingredient[1].checkAvailability(ingredient[0])) {
                 isAvailable = false;
             }
         });

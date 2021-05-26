@@ -1,18 +1,20 @@
 import React from 'react';
-import Controller from './Controller.js';
-import EInventoryCategory from './Enums/EInventoryCategory.js';
-import InventoryManager from './Modules/InventoryManager.js';
-import recipeManager from './Modules/RecipeManager.js';
+import Controller from './Controller';
+
+import EInventoryCategory from './Enums/EInventoryCategory';
+import InventoryManager from './Modules/InventoryManager';
+import RecipeManager from './Modules/RecipeManager';
 const App = () => {
   var con = new Controller();
   //con.addRecipe('Cuba Libra',[[30, 'Rum'],[90, 'Coke'],[20, 'Tequila'],],new Array('combine in a tall glass'),1);
   var inventoryMngr = new InventoryManager();
   initRecipeList();
+
   return (
     <div>
       <h1>Hello World</h1>
       <p>{con.recipeManager.recipeList[0].toString()}</p>
-      {inventoryMngr.toString()}
+      {inventoryMngr.toJson()}
       <p>
         {
           inventoryMngr.addIngredient(
@@ -49,6 +51,7 @@ const App = () => {
 const initRecipeList = () => {
   //this.recipeList.push(this.addRecipe('name',[[60, 'ingredient'],[30, 'ingredient'],[30, 'ingredient'],],['method'],1));
   console.log('initRecipeList');
+  var recipeManager = RecipeManager.getInstance();
   recipeManager.addRecipe(
     'Cuba Libra',
     [
