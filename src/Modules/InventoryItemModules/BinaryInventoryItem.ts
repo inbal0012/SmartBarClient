@@ -10,7 +10,7 @@ class BinaryInventoryItem extends AbstractInventoryItem {
         this.updateStatus();
     }
 
-    
+
     updateStatus(): void {
         this.needStatusUpdate = true;
     }
@@ -32,11 +32,11 @@ class BinaryInventoryItem extends AbstractInventoryItem {
                     this.category = newValue;
                     return {
                         success: true,
-                        reason: this.name + 'category updated',
+                        reason: this.name + "'s category updated",
                     };
                 }
                 else return {
-                    success:false,
+                    success: false,
                     reason: "can't change " + this.name + "'s category to " + newValue,
                 };
             case 'remaining':
@@ -49,6 +49,19 @@ class BinaryInventoryItem extends AbstractInventoryItem {
                         reason: this.name + 'remaining updated',
                     };
                 }
+                if (!(typeof (newValue) === 'number'))
+                    return {
+                        success: false,
+                        reason:
+                            "remaining has to be a number if you want to use it \nor a boolean if you want to update the status"
+                    };
+
+                if (newValue <= 0)
+                    return {
+                        success: false,
+                        reason:
+                            this.name + "'s remaining can't be 0 or lower"
+                    };
                 else if (!this.checkAvailability(newValue))
                     return {
                         success: false,
@@ -67,7 +80,7 @@ class BinaryInventoryItem extends AbstractInventoryItem {
                 return {
                     success: false,
                     reason:
-                        this.name + " doesn't have " + ingredientParam + 'parameter',
+                        this.name + " doesn't have a " + ingredientParam + ' parameter',
                 };
         }
     }

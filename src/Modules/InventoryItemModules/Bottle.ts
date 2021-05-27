@@ -45,9 +45,10 @@ class Bottle extends AbstractInventoryItem {
       case 'category':
         if (Bottle.isABottleCategory(newValue)) {
           this.category = newValue;
+
           return {
             success: true,
-            reason: this.name + 'category updated',
+            reason: this.name + "'s category updated",
           };
         }
         else return {
@@ -55,13 +56,16 @@ class Bottle extends AbstractInventoryItem {
           reason: "can't change " + this.name + "'s category to " + newValue,
         };
       case 'remaining':
+        var validate = this.validatePositiveAndNumber("remaining", newValue)
+        if (!validate.success)
+          return validate
         if (!this.checkAvailability(newValue))
           return {
             success: false,
             reason:
               "there's only " +
               this.remaining +
-              "left. you can't use " +
+              " left. you can't use " +
               newValue,
           };
         else {
@@ -72,18 +76,9 @@ class Bottle extends AbstractInventoryItem {
           };
         }
       case "minRequired":
-        if (newValue > 0)
-          return {
-            success: false,
-            reason:
-              "minRequired can't be lower then 0"
-          };
-        if (!(typeof (newValue) === 'number'))
-          return {
-            success: false,
-            reason:
-              "minRequired has to be a number"
-          };
+        var validate = this.validatePositiveAndNumber("minRequired", newValue)
+        if (!validate.success)
+          return validate
         this.minRequired = newValue;
         return {
           success: true,
@@ -97,18 +92,9 @@ class Bottle extends AbstractInventoryItem {
             reason:
               this.name + " is not an Alcohol type. it doesn't have alcohol percentage."
           };
-        if (newValue > 0)
-          return {
-            success: false,
-            reason:
-              "alcohol percentage can't be lower then 0"
-          };
-        if (typeof (newValue) !== 'number')
-          return {
-            success: false,
-            reason:
-              "alcohol percentage has to be a number"
-          };
+        var validate = this.validatePositiveAndNumber("alcohol percentage", newValue)
+        if (!validate.success)
+          return validate
         this.alcoholPercentage = newValue;
         return {
           success: true,
@@ -119,7 +105,7 @@ class Bottle extends AbstractInventoryItem {
         return {
           success: false,
           reason:
-            this.name + " doesn't have " + ingredientParam + 'parameter',
+            this.name + " doesn't have a " + ingredientParam + ' parameter',
         };
     }
   }
@@ -128,6 +114,26 @@ class Bottle extends AbstractInventoryItem {
     return this.remaining > amountNeeded;
   }
 
+  validatePositiveAndNumber(param: string, newValue: any) {
+    if (newValue <= 0)
+      return {
+        success: false,
+        reason:
+          this.name + "'s " + param + " can't be 0 or lower"
+      };
+    if (typeof (newValue) !== 'number')
+      return {
+        success: false,
+        reason:
+          param + " has to be a number"
+      };
+
+    return {
+      success: true,
+      reason:
+        ""
+    };
+  }
 
   static isABottleCategory(category: string) {
     if (
