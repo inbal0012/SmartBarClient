@@ -2,22 +2,22 @@ import React from 'react';
 import Controller from './Controller';
 
 import EInventoryCategory from './Enums/EInventoryCategory';
-import InventoryManager from './Modules/InventoryManager';
 import RecipeManager from './Modules/RecipeManager';
 const App = () => {
   var con = new Controller();
   //con.addRecipe('Cuba Libra',[[30, 'Rum'],[90, 'Coke'],[20, 'Tequila'],],new Array('combine in a tall glass'),1);
-  var inventoryMngr = new InventoryManager();
   initRecipeList();
 
   return (
     <div>
       <h1>Hello World</h1>
-      <p>{con.recipeManager.recipeList[0].toString()}</p>
-      {inventoryMngr.toJson()}
+      <p>{con.recipeManager.recipeList[0].toJson()}</p>
+      <p>{con.recipeManager.toJson()}</p>
+      <p>___</p>
+      {con.inventoryManager.toJson()}
       <p>
         {
-          inventoryMngr.addIngredient(
+          con.inventoryManager.addIngredient(
             'Captain Morgan',
             EInventoryCategory.BottleCategory.AlcoholCategory.Rum,
             400,
@@ -28,13 +28,17 @@ const App = () => {
       </p>
       <p>
         {
-          inventoryMngr.addIngredient('Lemon', EInventoryCategory.Fruits, 5, 1)
-            .reason
+          con.inventoryManager.addIngredient(
+            'Lemon',
+            EInventoryCategory.Fruits,
+            5,
+            1
+          ).reason
         }
       </p>
       <p>
         {
-          inventoryMngr.updateIngredient(
+          con.inventoryManager.updateIngredient(
             'Tequila',
             'category',
             EInventoryCategory.BottleCategory.AlcoholCategory.Tequila
@@ -43,14 +47,14 @@ const App = () => {
       </p>
 
       <p>{con.recipeManager.MakeCocktailByName('Cuba Libra').reason}</p>
-      {inventoryMngr.toString()}
+      <p>{con.recipeManager.checkRecipeAvailability('Old Fashioned').reason}</p>
+      {con.inventoryManager.toJson()}
     </div>
   );
 };
 
 const initRecipeList = () => {
   //this.recipeList.push(this.addRecipe('name',[[60, 'ingredient'],[30, 'ingredient'],[30, 'ingredient'],],['method'],1));
-  console.log('initRecipeList');
   var recipeManager = RecipeManager.getInstance();
   recipeManager.addRecipe(
     'Cuba Libra',

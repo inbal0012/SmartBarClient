@@ -21,23 +21,10 @@ class InventoryItem extends AbstractInventoryItem {
     else this.status = EInventoryStatus.Empty;
   }
 
-  toString() {
-    // return (
-    //   <li>
-    //   { this.name }
-    //   < ul >
-    //   <li>Type: { this.category } </li>
-    //     < li > Status: { this.status } </>
-    //       < /ul>
-    //       < /li>
-    // );
-    return "";
-  }
-
   toJson() {
     var json = JSON.stringify(this);
     console.log(json);
-    return json;   
+    return json;
   }
 
   use(amountUsed: number): void {
@@ -48,19 +35,10 @@ class InventoryItem extends AbstractInventoryItem {
   checkAvailability(amountNeeded: number): boolean {
     return this.remaining > amountNeeded;
   }
-
-  updateCategory(newCategory: string): void {
-    this.category = newCategory;
-    // TODO if Veg/Fruit of Bottle change to right class
-  }
 }
 class NullInventoryItem extends AbstractInventoryItem {
   constructor() {
     super('Unavailable', EInventoryCategory.Unavailable, 0);
-  }
-
-  toString() {
-    return 'Unavailable';
   }
 
   checkAvailability(amountNeeded: number) {
@@ -75,10 +53,6 @@ class NullInventoryItem extends AbstractInventoryItem {
   }
 
   use(amountUsed: number): void {
-    
-  }
-  updateCategory(newCategory: string): void {
-    
   }
 }
 

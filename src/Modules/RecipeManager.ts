@@ -1,20 +1,21 @@
 import DbMuck from '../DBMuck';
 import EInventoryCategory from '../Enums/EInventoryCategory';
+import DatabaseConnection from '../Interface/databaseConnection';
 import AbstractInventoryItem from './InventoryItemModules/AbstractInventoryItem';
 import InventoryItem from './InventoryItemModules/InventoryItem';
-import Recipe from './Recipe';
+import Recipe, { NullRecipe } from './Recipe';
 
-class RecipeManager {
+class RecipeManager implements DatabaseConnection {
   private static instance: RecipeManager;
   recipeList: Recipe[];
   isDBRecipeUpdateRequired: boolean;
 
   private constructor() {
-      this.recipeList = [];
-      this.isDBRecipeUpdateRequired = false;
-      RecipeManager.instance = this;
+    this.recipeList = [];
+    this.isDBRecipeUpdateRequired = false;
+    RecipeManager.instance = this;
   }
-  
+
   public static getInstance(): RecipeManager {
     if (!RecipeManager.instance) {
       RecipeManager.instance = new RecipeManager();
@@ -24,8 +25,9 @@ class RecipeManager {
   }
 
   //#region Database
-  connectDatabase() {
+  connectToDatabase() {
     // TODO
+    return true
   }
 
   fetchData() {
@@ -34,19 +36,66 @@ class RecipeManager {
 
   updateDatabase() {
     // TODO
+    return true
   }
   //#endregion database
-
-
-  getRecipe(name: string) {
-    return this.recipeList.find((recipe) => recipe.name === name);
-  }
-
+  //#region CRUD
   addRecipe(name: string, ingredients: [number, string][], method: string[], portion: number) {
-    if (this.recipeList.find((rcp) => rcp.name === name)) return;
+    if (this.recipeList.find((rcp) => rcp.name === name))
+      return { success: false, reason: name + ' already exist' };
     var newIngredients = this.extractIngredients(ingredients);
     this.recipeList.push(new Recipe(name, newIngredients, method, portion));
     this.isDBRecipeUpdateRequired = true;
+    return { success: true, reason: name + ' was added successfully' };
+  }
+
+  getRecipe(name: string) {
+    var result = this.recipeList.find((recipe) => recipe.name === name);
+    if (result === undefined) {
+      return new NullRecipe();
+    } else return result;
+  }
+
+  updateRecipe(recipeName: string, recipeParam: string, newValue: any) {
+    var recipe = this.recipeList.find(
+      (item) => item.name === recipeName
+    );
+    if (recipe === undefined)
+      return { success: false, reason: recipeName + " doesn't exist" };
+    switch (recipeParam) {
+      case 'name':
+        return { success: false, reason: "You can't change the name" };
+      case 'ingredients':
+        //TODO 
+        break;
+      case 'method':
+        //TODO 
+        break;
+      case "portion":
+        //TODO
+        break;
+      case "isAvailable":
+      case "Availability":
+        recipe.checkAvailability();
+        break;
+      default:
+        return {
+          success: false,
+          reason:
+            recipeName + " doesn't have " + recipeParam + 'parameter',
+        };
+    }
+  }
+  
+  deleteRecipe(name: string) {
+    this.recipeList.forEach((item, index) => {
+      if (item.name === name) this.recipeList.splice(index, 1);
+    });
+  }
+  //#endregion CRUD
+
+  toJson() {
+    return this.recipeList.map(rcp => rcp.toJson())
   }
 
   extractIngredients(ingredients: [number, string][]) {
@@ -81,10 +130,11 @@ class RecipeManager {
   }
 
   MakeCocktail(recipe: Recipe) {
-    if (!recipe.checkAvailability()) {
+    var result = recipe.checkAvailability();
+    if (!result.success) {
       return {
         success: false,
-        reason: 'unable to make the ' + recipe.name + ' cocktail',
+        reason: 'Unable to make the ' + recipe.name + ' cocktail. ' + result.reason,
       };
     }
     recipe.ingredients.forEach((element) => {
@@ -93,6 +143,34 @@ class RecipeManager {
     return {
       success: true,
       reason: 'Enjoy your ' + recipe.name + ' cocktail',
+    };
+  }
+
+  checkRecipeAvailability(param: Recipe | string) {
+    if (typeof (param) === 'string') {
+
+      var recipe = this.recipeList.find((rcp) => rcp.name === param);
+      if (recipe !== undefined)
+        param = recipe;
+      else
+        return {
+          success: false,
+          reason: param + ' not found',
+        };
+    }
+    if (param instanceof Recipe) {
+      var result = param.checkAvailability();
+      var unavailableStr = 'Unable to make the ' + param.name + ' cocktail ' + result.reason
+
+      return {
+        success: result.success,
+        reason: result.success ? param.name + " is availabile" : unavailableStr
+      };
+
+    }
+    return {
+      success: false,
+      reason: param + "not found"
     };
   }
 }

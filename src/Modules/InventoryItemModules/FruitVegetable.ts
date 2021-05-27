@@ -15,9 +15,11 @@ class FruitVegetable extends AbstractInventoryItem {
       this.updateStatus();
     } else throw new Error(category + " can't be a Veg/Fruit type");
   }
+
   getMinRequired() {
     return this.minRequired;
   }
+
   updateStatus() {
     console.log(this.name + ': ' + this.remaining + ' ' + this.minRequired);
     if (this.remaining > this.minRequired * 2)
@@ -25,20 +27,6 @@ class FruitVegetable extends AbstractInventoryItem {
     else if (this.remaining > this.minRequired)
       this.status = EInventoryStatus.AlmostEmpty;
     else this.status = EInventoryStatus.Empty;
-  }
-  toString() {
-    // return (
-    //   <li>
-    //     {this.name}
-    //     <ul>
-    //       <li>Type: {this.category}</li>
-    //       <li>Status: {this.status}</li>
-    //       <li>{this.remaining} left</li>
-    //       <li>min required: {this.minRequired}</li>
-    //     </ul>
-    //   </li>
-    // );
-    return "";
   }
   
   toJson() {
@@ -52,16 +40,6 @@ class FruitVegetable extends AbstractInventoryItem {
 
   checkAvailability(amountNeeded: number) {
     return this.remaining > amountNeeded;
-  }
-
-  updateCategory(newCategory: string) {
-    if (newCategory === this.category) return;
-    if (
-      newCategory === EInventoryCategory.Fruits ||
-      newCategory === EInventoryCategory.Vegetables
-    ) {
-      this.category = newCategory;
-    }
   }
 }
 

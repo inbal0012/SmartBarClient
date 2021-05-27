@@ -6,7 +6,7 @@ export default abstract class AbstractInventoryItem {
     remaining;
     status;
 
-    constructor(name: string, category: string, remaining: number) {
+    constructor(name: string, category: string, remaining: any) {
         this.name = name;
         this.category = category;
         this.remaining = remaining;
@@ -28,9 +28,7 @@ export default abstract class AbstractInventoryItem {
         return this.remaining;
     }
     abstract updateStatus(): void;
-    abstract toString(): string;
     abstract toJson(): any;
     abstract use(amountUsed: number):void
     abstract checkAvailability(amountNeeded: number) : boolean;
-    abstract updateCategory(newCategory: string): void;
 }

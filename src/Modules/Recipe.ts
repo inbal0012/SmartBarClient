@@ -7,7 +7,7 @@ class Recipe {
     ingredients: [number, AbstractInventoryItem][];
     method: Array<string>;
     portion: number;
-    categories: Array<string>;
+    //categories: Array<string>;
     isAvailable: boolean;
     // TODO measurement converting ( + measure unit for misc InItems)
     // TODO garnish
@@ -19,7 +19,7 @@ class Recipe {
         this.ingredients = ingredients;
         this.method = method;
         this.portion = portion;
-        this.categories = new Array(ERecipeCategory.StrengthNonAlcoholic);
+        //this.categories = new Array(ERecipeCategory.StrengthNonAlcoholic);
     }
 
     addCategory(category: string) {
@@ -28,16 +28,16 @@ class Recipe {
 
     checkAvailability() {
         var isAvailable = true;
-        console.log(this.ingredients);
+        var missingIng = "";
 
         this.ingredients.forEach(ingredient => {
-            console.log(ingredient[1]);
-
             if (!ingredient[1].checkAvailability(ingredient[0])) {
                 isAvailable = false;
+                missingIng += ingredient[1].name + ", ";
             }
         });
-        return isAvailable;
+        this.isAvailable = isAvailable
+        return { success: isAvailable, reason: isAvailable ? "All ingredients available" : "Missing ingredients: " + missingIng };
     }
 
     calculateDrinkStrength() {
@@ -49,16 +49,24 @@ class Recipe {
         // TODO
     }
 
-    toString() {
-        return this.name + " strength: " + this.categories + " Ingredients: " + this.ingredientsToString() + " Method: " + this.method.toString();
+    toJson() {
+        return JSON.stringify({
+            name: this.name,
+            ingredients: this.ingredientsToJson(),
+            method: this.method,
+            portion: this.portion,
+            //categories: JSON.stringify(this.categories),
+            isAvailable: this.isAvailable,
+        })
     }
 
-    ingredientsToString() {
-        var str: string = "";
+    ingredientsToJson() {
+        var str: string = "[";
 
         this.ingredients.forEach(item => {
-            str += item[0] + " " + item[1].getName() + " ";
+            str += item[0] + " " + item[1].getName() + ", ";
         });
+        str+="]"
         //str+=this.ingredients.map(ing => {return (<li>{ing[0]} {ing[1].getName()}</li>)})
         return str;
     }
@@ -74,18 +82,18 @@ class NullRecipe extends Recipe {
     }
 
     checkAvailability() {
-        return false;
+        return { success: false, reason: "Recipe Not Found" };
     }
 
     calculateDrinkStrength() {
         return 0;
     }
 
-    toString() {
-        return "Recipe Not Found";
+    toJson() {
+        return JSON.stringify("Recipe Not Found");
     }
 
-    ingredientsToString(): string {
+    ingredientsToJson(): string {
         return "Recipe Not Found";
     }
 }

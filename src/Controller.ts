@@ -1,82 +1,85 @@
 import DbMuck from './DBMuck';
+import DatabaseConnection from './Interface/databaseConnection';
+import InventoryManager from './Modules/InventoryManager';
+import Recipe from './Modules/Recipe';
 import RecipeManager from './Modules/RecipeManager';
 
-// class Controller2 {
-//   recipeList;
-//   DbMuck;
-
-//   constructor() {
-//     this.DbMuck = DbMuck;
-//     this.recipeList = [];
-//   }
-//   getRecipe(name) {
-//     return this.recipeList.find((recipe) => recipe.name === name);
-//   }
-//   addRecipe(name, ingredients, method, portion) {
-//     var newIngredients = this.extractIngredients(ingredients);
-//     this.recipeList.push(new Recipe(name, newIngredients, method, portion));
-//   }
-//   extractIngredients(ingredients) {
-//     var newIngredients = [];
-//     ingredients.forEach((element) => {
-//       var item = DbMuck.getItemByName(element[1]);
-//       if (item.getName() !== 'Unavailable') {
-//         newIngredients.push([element[0], item]);
-//       } else {
-//         var newItem = new InventoryItem(
-//           element[1],
-//           EInventoryCategory.Unsorted,
-//           0,
-//           0
-//         );
-//         DbMuck.addItem(newItem);
-//         newIngredients.push([element[0], newItem]);
-//       }
-//     });
-//     return newIngredients;
-//   }
-//   MakeCocktailByName(name) {
-//     console.log('make cocktail ' + name);
-//     var recipe = this.recipeList.find((recipe) => recipe.name === name);
-//     if (recipe !== undefined) return this.#MakeCocktail(recipe);
-//     else
-//       return {
-//         success: false,
-//         reason: name + ' not found',
-//       };
-//   }
-
-//   #MakeCocktail(recipe) {
-//     if (!recipe instanceof Recipe) return;
-//     if (!recipe.checkAvailability()) {
-//       return {
-//         success: false,
-//         reason: 'unable to make the ' + recipe.name + ' cocktail',
-//       };
-//     }
-//     recipe.ingredients.forEach((element) => {
-//       element[1].Use(element[0]);
-//     });
-//     return {
-//       success: true,
-//       reason: 'Enjoy your ' + recipe.name + ' cocktail',
-//     };
-//   }
-// }
-
-class Controller {
-  recipeManager;
+class Controller implements DatabaseConnection {
+  private recipeManager;
+  private inventoryManager;
   DbMuck;
 
   constructor() {
     this.DbMuck = DbMuck;
     this.recipeManager = RecipeManager.getInstance();
+    this.inventoryManager = InventoryManager.getInstance()
+  }
+  //#region Database
+  connectToDatabase() {
+    return this.recipeManager.connectToDatabase() && this.inventoryManager.connectToDatabase()
   }
 
-  addRecipe(name: string, ingredients: [number, string][], method: string[], portion: number) {
-    console.log('addRecipe ' + name);
-    this.recipeManager.addRecipe(name, ingredients, method, portion);
+  fetchData() {
+    this.recipeManager.fetchData();
+    this.inventoryManager.fetchData();
   }
+
+  updateDatabase() {
+    return this.recipeManager.updateDatabase() && this.inventoryManager.updateDatabase();
+  }
+  //#endregion Database
+
+  //#region inventory
+  addIngredient(name: string, category: string, remaining: number, minRequired: number = 0, alcoholPercentage: number = 0) {
+    return this.inventoryManager.addIngredient(name, category, remaining, minRequired, alcoholPercentage)
+  }
+
+  getIngredient(name: string) {
+    return this.inventoryManager.getIngredient(name);
+  }
+
+  updateIngredient(ingredientName: string, ingredientParam: string, newValue: any) {
+    return this.inventoryManager.updateIngredient(ingredientName, ingredientParam, newValue);
+  }
+
+  deleteIngredient(name: string) {
+    return this.inventoryManager.deleteIngredient(name)
+  }
+
+  ingredientsToJson() {
+    return this.inventoryManager.toJson();
+  }
+
+  filterIngredientsByCategory(targetCategory: string) {
+    return this.inventoryManager.filterByCategory(targetCategory);
+  }
+  //#endregion inventory
+
+  //#region Recipes
+  addRecipe(name: string, ingredients: [number, string][], method: string[], portion: number) {
+    return this.recipeManager.addRecipe(name, ingredients, method, portion);
+  }
+
+  getRecipe(name: string) {
+    return this.recipeManager.getRecipe(name)
+  }
+
+  updateRecipe(recipeName: string, recipeParam: string, newValue: any) {
+    return this.recipeManager.updateRecipe(recipeName, recipeParam, newValue)
+  }
+
+  deleteRecipe(name: string) {
+    return this.recipeManager.deleteRecipe(name)
+  }
+
+  makeCocktail(name: string) {
+    return this.recipeManager.MakeCocktailByName(name);
+  }
+
+  checkRecipeAvailability(param: Recipe | string) {
+    return this.recipeManager.checkRecipeAvailability(param);
+  }
+  //#endregion Recipes
 }
 
 export default Controller;

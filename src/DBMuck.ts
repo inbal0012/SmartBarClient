@@ -1,5 +1,6 @@
 import EInventoryCategory from './Enums/EInventoryCategory';
 import AbstractInventoryItem from './Modules/InventoryItemModules/AbstractInventoryItem';
+import BinaryInventoryItem from './Modules/InventoryItemModules/BinaryInventoryItem';
 import BottleBuilder from './Modules/InventoryItemModules/Bottle';
 import FruitVegetable from './Modules/InventoryItemModules/FruitVegetable';
 import { NullInventoryItem } from './Modules/InventoryItemModules/InventoryItem';
@@ -11,7 +12,7 @@ class DBMuck {
   recipeList: Recipe[] = [];
 
   private constructor() {
-      this.initInventory();
+    this.initInventory();
   }
 
   public static getInstance(): DBMuck {
@@ -26,35 +27,24 @@ class DBMuck {
   initInventory() {
     this.inventory = [];
     try {
-      this.addItem(
-        new BottleBuilder(
-          'Kraken',
-          EInventoryCategory.BottleCategory.AlcoholCategory.Rum,
-          200,
-          30
-        )
-          .alcoholPercentage(40)
-          .build()
-      );
-      this.addItem(
-        new BottleBuilder(
-          'Milk',
-          EInventoryCategory.BottleCategory.Dairy,
-          30,
-          50
-        ).build()
-      );
-      this.addItem(
-        new BottleBuilder(
-          'Coke',
-          EInventoryCategory.BottleCategory.Beverage,
-          100,
-          50
-        ).build()
-      );
-      this.addItem(
-        new FruitVegetable('Apple', EInventoryCategory.Fruits, 5, 1)
-      );
+      this.addItem(new BottleBuilder('Kraken', EInventoryCategory.BottleCategory.AlcoholCategory.Rum, 200, 30).alcoholPercentage(40).build());
+      this.addItem(new BottleBuilder('Milk', EInventoryCategory.BottleCategory.Dairy, 30, 50).build());
+      this.addItem(new BottleBuilder('Coke', EInventoryCategory.BottleCategory.Beverage, 100, 50).build());
+      this.addItem(new FruitVegetable('Apple', EInventoryCategory.Fruits, 5, 1));
+      this.addItem(new BottleBuilder("Angostura bitters", EInventoryCategory.BottleCategory.Bitter, 100, 10).alcoholPercentage(44.7).build())
+      this.addItem(new BottleBuilder("Campari", EInventoryCategory.BottleCategory.AlcoholCategory.Liquor, 500, 30).alcoholPercentage(25).build())
+      this.addItem(new BottleBuilder("Citrus Vodka", EInventoryCategory.BottleCategory.AlcoholCategory.Vodka, 300, 30).alcoholPercentage(37.5).build())
+      this.addItem(new BottleBuilder("Cointreau", EInventoryCategory.BottleCategory.AlcoholCategory.Liquor, 500, 30).alcoholPercentage(40).build())
+      this.addItem(new BottleBuilder("Cranberry Juice", EInventoryCategory.BottleCategory.Juice, 0, 50).build())
+      this.addItem(new BottleBuilder("Dry Vermouth", EInventoryCategory.BottleCategory.AlcoholCategory.Vermouth, 700, 15).alcoholPercentage(18).build())
+      this.addItem(new BottleBuilder("Hendricks", EInventoryCategory.BottleCategory.AlcoholCategory.Gin, 400, 30).alcoholPercentage(44).build())
+      this.addItem(new BottleBuilder("Lime Juice", EInventoryCategory.BottleCategory.Juice, 0, 50).build())
+      this.addItem(new BottleBuilder("Sweet Vermouth", EInventoryCategory.BottleCategory.AlcoholCategory.Vermouth, 700, 15).alcoholPercentage(16).build())
+      this.addItem(new BottleBuilder("Jose Cuervo ", EInventoryCategory.BottleCategory.AlcoholCategory.Tequila, 60, 30).alcoholPercentage(40).build())
+      this.addItem(new BottleBuilder("Jack Daniels", EInventoryCategory.BottleCategory.AlcoholCategory.Whiskey, 200, 30).alcoholPercentage(40).build())
+      this.addItem(new BinaryInventoryItem("Mint Leaves", EInventoryCategory.Herbs, true))
+      this.addItem(new BottleBuilder("Simple Syrup", EInventoryCategory.BottleCategory.Syrup, 50, 10).build())
+      this.addItem(new BinaryInventoryItem("Sugar", EInventoryCategory.Spices, true))
     } catch (error) {
       console.log(error);
     }
