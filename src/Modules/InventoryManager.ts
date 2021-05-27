@@ -144,7 +144,7 @@ class InventoryManager implements DatabaseConnection {
         this.addIngredient(ingredient.name, newValue, ingredient.remaining, 1);
         return { success: true, reason: ingredient.name + "'s category changed to " + newValue, };
       }
-      else ingredient.update("category", newValue);
+      else return ingredient.update("category", newValue);
     }
   }
 }
