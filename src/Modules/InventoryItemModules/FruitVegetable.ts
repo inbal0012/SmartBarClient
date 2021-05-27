@@ -28,7 +28,7 @@ class FruitVegetable extends AbstractInventoryItem {
       this.status = EInventoryStatus.AlmostEmpty;
     else this.status = EInventoryStatus.Empty;
   }
-  
+
   toJson() {
     JSON.stringify(this);
   }
@@ -36,6 +36,67 @@ class FruitVegetable extends AbstractInventoryItem {
   use(amountUsed: number) {
     this.remaining -= amountUsed;
     this.updateStatus();
+  }
+
+  update(ingredientParam: string, newValue: any) {
+    switch (ingredientParam) {
+      case 'name':
+        return { success: false, reason: "You can't change the name" };
+      case 'category':
+        if (newValue === EInventoryCategory.Fruits || newValue === EInventoryCategory.Vegetables) {
+          this.category = newValue;
+          return {
+            success: true,
+            reason: this.name + 'category updated',
+          };
+        }
+        else return {
+          success: false,
+          reason: "can't change " + this.name + "'s category to " + newValue,
+        };
+      case 'remaining':
+        if (!this.checkAvailability(newValue))
+          return {
+            success: false,
+            reason:
+              "there's only " +
+              this.remaining +
+              "left. you can't use " +
+              newValue,
+          };
+        else {
+          this.use(newValue);
+          return {
+            success: true,
+            reason: this.name + 'used',
+          };
+        }
+      case "minRequired":
+        if (newValue > 0)
+          return {
+            success: false,
+            reason:
+              "minRequired can't be lower then 0"
+          };
+        if (!(typeof (newValue) === 'number'))
+          return {
+            success: false,
+            reason:
+              "minRequired has to be a number"
+          };
+        this.minRequired = newValue;
+        return {
+          success: true,
+          reason:
+            "minRequired changed to " + newValue
+        };
+      default:
+        return {
+          success: false,
+          reason:
+            this.name + " doesn't have " + ingredientParam + 'parameter',
+        };
+    }
   }
 
   checkAvailability(amountNeeded: number) {

@@ -44,7 +44,7 @@ class InventoryManager implements DatabaseConnection {
     return true;
   }
   //#endregion database
-  
+
   //#region CRUD
   addIngredient(
     name: string,
@@ -106,36 +106,8 @@ class InventoryManager implements DatabaseConnection {
     );
     if (ingredient === undefined)
       return { success: false, reason: ingredientName + " doesn't exist" };
-    switch (ingredientParam) {
-      case 'name':
-        return { success: false, reason: "You can't change the name" };
-      case 'category':
-        return this.updateCategory(ingredient, newValue);
-      case 'remaining':
-        if (ingredient.checkAvailability(newValue))
-          return {
-            success: false,
-            reason:
-              "there's only " +
-              ingredient.remaining +
-              "left. you can't use " +
-              newValue,
-          };
-        else {
-          ingredient.use(newValue);
-          return {
-            success: true,
-            reason: ingredientName + 'used',
-          };
-        }
-
-      default:
-        return {
-          success: false,
-          reason:
-            ingredientName + " doesn't have " + ingredientParam + 'parameter',
-        };
-    }
+    if (ingredientParam === "category") return this.updateCategory(ingredient, newValue);
+    else return ingredient.update(ingredientParam, newValue);
   }
 
   deleteIngredient(name: string) {
@@ -167,20 +139,12 @@ class InventoryManager implements DatabaseConnection {
     if (!this.checkIfIsCategory(newValue))
       return { success: false, reason: 'please select a valid category' };
     else {
-      if (newValue === EInventoryCategory.Unavailable || newValue === EInventoryCategory.Unsorted) {
+      if (newValue === EInventoryCategory.Unavailable || newValue === EInventoryCategory.Unsorted || ingredient instanceof InventoryItem) {
         this.deleteIngredient(ingredient.name);
         this.addIngredient(ingredient.name, newValue, ingredient.remaining, 1);
         return { success: true, reason: ingredient.name + "'s category changed to " + newValue, };
       }
-      if (Bottle.isABottleCategory(ingredient.category)) {
-        if (Bottle.isABottleCategory(newValue)) {
-          ingredient.category = newValue;
-          return { success: true, reason: ingredient.name + "'s category changed to " + newValue, };
-        } else
-          return { success: false, reason: "can't change " + ingredient.name + "'s category. a Bottle can't become a " + newValue };
-      }
-      ingredient.category = newValue;
-      return { success: true, reason: ingredient.name + "'s category changed to " + newValue, };
+      else ingredient.update("category", newValue);
     }
   }
 }

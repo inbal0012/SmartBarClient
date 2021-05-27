@@ -27,8 +27,12 @@ export default abstract class AbstractInventoryItem {
     getRemaining() {
         return this.remaining;
     }
+    abstract update(ingredientParam: string, newValue: any):  {
+        success: boolean;
+        reason: string;
+    };
     abstract updateStatus(): void;
     abstract toJson(): any;
-    abstract use(amountUsed: number):void
-    abstract checkAvailability(amountNeeded: number) : boolean;
+    abstract use(amountUsed: number): void
+    abstract checkAvailability(amountNeeded: number): boolean;
 }
