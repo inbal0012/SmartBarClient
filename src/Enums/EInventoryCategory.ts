@@ -20,7 +20,6 @@ const EInventoryCategory = {
     Dairy: 'Dairy',
   },
   Fridge: 'Fridge',
-  Dairy: 'Dairy',
   Fruits: 'Fruits',
   Vegetables: 'Vegetables',
   Spices: 'Spices',
