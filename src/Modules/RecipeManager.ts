@@ -82,7 +82,7 @@ class RecipeManager implements DatabaseConnection {
         return {
           success: false,
           reason:
-            recipeName + " doesn't have " + recipeParam + 'parameter',
+            recipeName + " doesn't have a " + recipeParam + ' parameter',
         };
     }
   }
