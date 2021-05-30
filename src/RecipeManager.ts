@@ -1,9 +1,9 @@
-import DbMuck from '../DBMuck';
-import EInventoryCategory from '../Enums/EInventoryCategory';
-import DatabaseConnection from '../Interface/databaseConnection';
-import AbstractInventoryItem from './InventoryItemModules/AbstractInventoryItem';
-import InventoryItem from './InventoryItemModules/InventoryItem';
-import Recipe, { NullRecipe } from './Recipe';
+import EInventoryCategory from './common/src/Enums/EInventoryCategory';
+import DatabaseConnection from './common/src/Interface/databaseConnection';
+import AbstractInventoryItem from './common/src/Modules/InventoryItemModules/AbstractInventoryItem';
+import InventoryItem from './common/src/Modules/InventoryItemModules/InventoryItem';
+import Recipe, { NullRecipe } from './common/src/Modules/Recipe';
+import DBMuck from './DBMuck';
 
 class RecipeManager implements DatabaseConnection {
   private static instance: RecipeManager;
@@ -31,7 +31,7 @@ class RecipeManager implements DatabaseConnection {
   }
 
   fetchData() {
-    this.recipeList = DbMuck.getInstance().recipeList;
+    this.recipeList = DBMuck.getInstance().recipeList;
   }
 
   updateDatabase() {
@@ -101,7 +101,7 @@ class RecipeManager implements DatabaseConnection {
   extractIngredients(ingredients: [number, string][]) {
     var newIngredients: [number, AbstractInventoryItem][] = [];
     ingredients.forEach((element) => {
-      var item = DbMuck.getInstance().getIngredientByName(element[1]);
+      var item = DBMuck.getInstance().getIngredientByName(element[1]);
       if (item.getName() !== 'Unavailable') {
         newIngredients.push([element[0], item]);
       } else {
@@ -111,7 +111,7 @@ class RecipeManager implements DatabaseConnection {
           0,
           0
         );
-        DbMuck.getInstance().addItem(newItem);
+        DBMuck.getInstance().addItem(newItem);
         newIngredients.push([element[0], newItem]);
       }
     });

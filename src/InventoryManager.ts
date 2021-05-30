@@ -1,13 +1,13 @@
-import DbMuck from '../DBMuck';
-import EInventoryCategory from '../Enums/EInventoryCategory';
-import BottleBuilder, { Bottle } from './InventoryItemModules/Bottle';
-import FruitVegetable from './InventoryItemModules/FruitVegetable';
+import EInventoryCategory from './common/src/Enums/EInventoryCategory';
+import BottleBuilder, { Bottle } from './common/src/Modules/InventoryItemModules/Bottle';
+import FruitVegetable from './common/src/Modules/InventoryItemModules/FruitVegetable';
 import InventoryItem, {
   NullInventoryItem,
-} from './InventoryItemModules/InventoryItem';
-import AbstractInventoryItem from './InventoryItemModules/AbstractInventoryItem';
-import DatabaseConnection from '../Interface/databaseConnection';
-import BinaryInventoryItem from './InventoryItemModules/BinaryInventoryItem';
+} from './common/src/Modules/InventoryItemModules/InventoryItem';
+import AbstractInventoryItem from './common/src/Modules/InventoryItemModules/AbstractInventoryItem';
+import DatabaseConnection from './common/src/Interface/databaseConnection';
+import BinaryInventoryItem from './common/src/Modules/InventoryItemModules/BinaryInventoryItem';
+import DBMuck from './DBMuck';
 
 class InventoryManager implements DatabaseConnection {
   private static instance: InventoryManager;
@@ -35,7 +35,7 @@ class InventoryManager implements DatabaseConnection {
   }
 
   fetchData() {
-    this.inventory = DbMuck.getInstance().inventory;
+    this.inventory = DBMuck.getInstance().inventory;
   }
 
   updateDatabase() {

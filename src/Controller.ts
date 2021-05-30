@@ -1,8 +1,8 @@
-import DbMuck from './DBMuck';
-import DatabaseConnection from './Interface/databaseConnection';
-import InventoryManager from './Modules/InventoryManager';
-import Recipe from './Modules/Recipe';
-import RecipeManager from './Modules/RecipeManager';
+import DatabaseConnection from "./common/src/Interface/databaseConnection";
+import InventoryManager from "./InventoryManager";
+import RecipeManager from "./RecipeManager";
+import Recipe from "./common/src/Modules/Recipe";
+import DBMuck from "./DBMuck";
 
 class Controller implements DatabaseConnection {
   private recipeManager;
@@ -10,7 +10,7 @@ class Controller implements DatabaseConnection {
   DbMuck;
 
   constructor() {
-    this.DbMuck = DbMuck;
+    this.DbMuck = DBMuck;
     this.recipeManager = RecipeManager.getInstance();
     this.inventoryManager = InventoryManager.getInstance()
   }

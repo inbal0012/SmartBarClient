@@ -1,10 +1,10 @@
-import EInventoryCategory from './Enums/EInventoryCategory';
-import AbstractInventoryItem from './Modules/InventoryItemModules/AbstractInventoryItem';
-import BinaryInventoryItem from './Modules/InventoryItemModules/BinaryInventoryItem';
-import BottleBuilder from './Modules/InventoryItemModules/Bottle';
-import FruitVegetable from './Modules/InventoryItemModules/FruitVegetable';
-import { NullInventoryItem } from './Modules/InventoryItemModules/InventoryItem';
-import Recipe from './Modules/Recipe';
+import EInventoryCategory from "./common/src/Enums/EInventoryCategory";
+import AbstractInventoryItem from "./common/src/Modules/InventoryItemModules/AbstractInventoryItem";
+import BinaryInventoryItem from "./common/src/Modules/InventoryItemModules/BinaryInventoryItem";
+import BottleBuilder from "./common/src/Modules/InventoryItemModules/Bottle";
+import FruitVegetable from "./common/src/Modules/InventoryItemModules/FruitVegetable";
+import { NullInventoryItem } from "./common/src/Modules/InventoryItemModules/InventoryItem";
+import Recipe from "./common/src/Modules/Recipe";
 
 class DBMuck {
   private static instance: DBMuck;

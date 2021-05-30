@@ -1,8 +1,7 @@
 import React from 'react';
+import EInventoryCategory from './common/src/Enums/EInventoryCategory';
 import Controller from './Controller';
-
-import EInventoryCategory from './Enums/EInventoryCategory';
-import RecipeManager from './Modules/RecipeManager';
+import RecipeManager from './RecipeManager';
 const App = () => {
   var con = new Controller();
   //con.addRecipe('Cuba Libra',[[30, 'Rum'],[90, 'Coke'],[20, 'Tequila'],],new Array('combine in a tall glass'),1);
@@ -12,9 +11,6 @@ const App = () => {
     <div>
       <h1>Hello World</h1>
       <p>{con.recipeManager.recipeList[0].toJson()}</p>
-      <p>{con.recipeManager.toJson()}</p>
-      <p>___</p>
-      {con.inventoryManager.toJson()}
       <p>
         {
           con.inventoryManager.addIngredient(
@@ -46,9 +42,9 @@ const App = () => {
         }
       </p>
 
-      <p>{con.recipeManager.MakeCocktailByName('Cuba Libra').reason}</p>
-      <p>{con.recipeManager.checkRecipeAvailability('Old Fashioned').reason}</p>
-      {con.inventoryManager.toJson()}
+      <p>{con.makeCocktail('Cuba Libra').reason}</p>
+      <p>{con.checkRecipeAvailability('Old Fashioned').reason}</p>
+      <p>{con.updateIngredient('Apple', 'minRequired', -4).reason}</p>
     </div>
   );
 };
