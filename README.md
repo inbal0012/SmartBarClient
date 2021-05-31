@@ -9,7 +9,7 @@ A full-stack Web app written using MERN, it includes the following:
 
 Common modules, enums and interfaces used both on the Server and Client side can be found in the following repository: https://github.com/inbal0012/SmartBarCommon
 
-Server Side: https://github.com/inbal0012/SmartBarClient
+Server Side: https://github.com/inbal0012/SmartBarServer
 
 _________________________________________________________________________________________________
 
