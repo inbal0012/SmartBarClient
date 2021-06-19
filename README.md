@@ -1,7 +1,9 @@
 # Smart Bar Client
+
 ⚠️ This is a work in progress ⚠️
 
 A full-stack Web app written using MERN, it includes the following:
+
 - Inventory management
 - Smart cocktail ordering system
 - Allows the users to order drinks based on the bar inventory
@@ -11,7 +13,7 @@ Common modules, enums and interfaces used both on the Server and Client side can
 
 Server Side: https://github.com/inbal0012/SmartBarServer
 
-_________________________________________________________________________________________________
+---
 
 # Getting Started with Create React App
 
