@@ -1,5 +1,4 @@
 import SimpleTabs from './Components/Tabs';
-import './App.css';
 
 function App() {
   return (
