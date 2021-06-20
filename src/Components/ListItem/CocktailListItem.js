@@ -1,10 +1,14 @@
+import { spacing } from '@material-ui/system';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import EditIcon from '@material-ui/icons/Edit';
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
-import ServerUrl from '../typesAndConsts';
+import ServerUrl from '../../typesAndConsts';
 
 export default class CocktailListItem extends React.Component {
   constructor(props) {
@@ -15,6 +19,7 @@ export default class CocktailListItem extends React.Component {
     this.state = {
       recipe: { ...props },
       ingredientList: [],
+      spacing: 8,
     };
   }
 
@@ -47,11 +52,19 @@ export default class CocktailListItem extends React.Component {
 
   render() {
     return (
-      <ListItem button>
-        <ListItemText
-          primary={this.state.recipe.name}
-          secondary={this.state.ingredientList.toString()}
-        />
+      <ListItem>
+        <Link to={'/cocktail/' + this.state.recipe._id}>
+          <ListItemText
+            primary={this.state.recipe.name}
+            secondary={this.state.ingredientList.join(', ')}
+          />
+        </Link>
+
+        <Link to={'/cocktail/edit/' + this.state.recipe._id} ml={10}>
+          <ListItemIcon>
+            <EditIcon />
+          </ListItemIcon>
+        </Link>
       </ListItem>
     );
   }
