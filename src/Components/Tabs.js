@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,8 +12,8 @@ import axios from 'axios';
 import ServerUrl from '../typesAndConsts';
 
 import List from './List';
-import CocktailListItem from './CocktailListItem';
-import InventoryListItem from './InventoryListItem';
+import CocktailListItem from './ListItem/CocktailListItem';
+import InventoryListItem from './ListItem/InventoryListItem';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -51,6 +52,8 @@ export default class SimpleTabs extends React.Component {
     super(props);
     //func binding
     this.handleChange = this.handleChange.bind(this);
+    this.addNewCocktail = this.addNewCocktail.bind(this);
+    this.addNewIngredient = this.addNewIngredient.bind(this);
 
     //Set initial state
     this.state = {
@@ -103,6 +106,15 @@ export default class SimpleTabs extends React.Component {
       });
   }
 
+  addNewCocktail() {
+    console.log('cocktails fab clicked');
+    this.props.history.push('/cocktails/add');
+  }
+
+  addNewIngredient() {
+    console.log('ingredient fab clicked');
+  }
+
   render() {
     return (
       <div className={this.classes.root}>
@@ -113,10 +125,18 @@ export default class SimpleTabs extends React.Component {
           </Tabs>
         </AppBar>
         <TabPanel value={this.state.value} index={0}>
-          <List list={this.state.Recipes} ItemType={CocktailListItem} />
+          <List
+            list={this.state.Recipes}
+            ItemType={CocktailListItem}
+            fabOnClick={this.addNewCocktail}
+          />
         </TabPanel>
         <TabPanel value={this.state.value} index={1}>
-          <List list={this.state.Inventory} ItemType={InventoryListItem} />
+          <List
+            list={this.state.Inventory}
+            ItemType={InventoryListItem}
+            fabOnClick={this.addNewIngredient}
+          />
         </TabPanel>
       </div>
     );
