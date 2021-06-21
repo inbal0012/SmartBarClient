@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
-
 import {
   Button,
   List,
@@ -40,14 +39,14 @@ export default class ShowCocktail extends Component {
       .get(ServerUrl + 'recipe/' + this.state.cocktailID)
       .then((res) => {
         console.log(res.data.ingredients);
-        let ings = res.data.ingredients.map((ing) => [
+        let ingredientsStrList = res.data.ingredients.map((ing) => [
           ing[0],
           ing[1].name,
           ing[2],
         ]);
         this.setState({
           name: res.data.name,
-          ingredients: ings,
+          ingredients: ingredientsStrList,
           method: res.data.method,
           portion: res.data.portion,
           ingredientsFullData: res.data.ingredients,
@@ -72,6 +71,23 @@ export default class ShowCocktail extends Component {
   }
 
   makeCocktail() {
+    axios
+      .get(ServerUrl + 'recipe/' + this.state.cocktailID + '/make')
+      .then((res) => {
+        console.log(res.data);
+        //TODO reroute to "Enjoy your cocktail"
+        // this.props.history.push({
+        //   pathname: '/EnjoyYourCocktail/' + this.state.cocktailID,
+        //   state: { output: res.data },
+        // });
+        this.props.history.push({
+          pathname: '/EnjoyYourCocktail/' + res.data,
+          state: { output: res.data },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   classes = makeStyles((theme) => ({
