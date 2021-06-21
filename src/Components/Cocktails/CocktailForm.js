@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, List, makeStyles, TextField } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -8,10 +8,23 @@ import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: 200,
-    },
+    flexGrow: 1,
+    background: theme.palette.divider,
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  textField: {
+    width: 'flex',
+    marginLeft: 15,
+    marginRight: 15,
+    background: theme.palette.background.paper,
+  },
+  divider: {
+    marginBottom: 15,
+    marginTop: 15,
   },
 }));
 
@@ -27,12 +40,13 @@ function CocktailForm(props) {
           required
           id='Name'
           type='text'
-          className='form-control'
+          className={classes.textField}
           label='cocktail name'
           value={props.name}
           onChange={props.onChangeName}
         />
       </FormGroup>
+      <Divider className={classes.divider} />
       <FormGroup>
         <label>Ingredients: </label>
         <List>
@@ -51,7 +65,7 @@ function CocktailForm(props) {
           <TextField
             id='amount'
             type='number'
-            className='form-control'
+            className={classes.textField}
             label='amount'
             value={props.newIngAmount}
             onChange={props.onChangeNewIngAmount}
@@ -59,7 +73,7 @@ function CocktailForm(props) {
           <TextField
             id='ingName'
             type='text'
-            className='form-control'
+            className={classes.textField}
             label='ingredient name'
             value={props.newIngName}
             onChange={props.onChangeNewIngName}
@@ -75,11 +89,16 @@ function CocktailForm(props) {
             }
             label='Is Optional'
           />
-          <Button variant='contained' onClick={props.newIngredientAdded}>
+          <Button
+            variant='contained'
+            onClick={props.newIngredientAdded}
+            color='primary'
+          >
             Add Ingredient
           </Button>
         </FormGroup>
       </FormGroup>
+      <Divider className={classes.divider} />
       <FormGroup>
         <label>Method: </label>
         <List>
@@ -89,36 +108,46 @@ function CocktailForm(props) {
         </List>
 
         <FormGroup row>
-          <input
+          <TextField
             id='newStep'
             type='text'
-            className='form-control'
-            placeholder='add step'
+            className={classes.textField}
+            label='add step'
             value={props.newStep}
             onChange={props.onChangeNewStep}
           />
-          <Button variant='contained' onClick={props.newStepAdded}>
+          <Button
+            variant='contained'
+            onClick={props.newStepAdded}
+            color='primary'
+          >
             Add Step
           </Button>
         </FormGroup>
       </FormGroup>
+      <Divider className={classes.divider} />
       <FormGroup>
-        <label>portion: </label>
+        <label>Portion: </label>
 
         <TextField
           id='ingName'
           label='portion'
           type='number'
-          className='form-control'
+          className={classes.textField}
           value={props.portion}
           onChange={props.onChangePortion}
         />
       </FormGroup>
-
-      <Divider />
-      <div className='form-group'>
-        <input type='Submit' value={props.submitTitle} className='btn btn-primary' />
-      </div>
+      <Divider className={classes.divider} />
+      <FormGroup>
+        <Button
+          variant='contained'
+          onClick={props.newIngredientAdded}
+          color='primary'
+        >
+          {props.submitTitle}
+        </Button>
+      </FormGroup>
     </form>
   );
 }
