@@ -26,6 +26,7 @@ export default class AddCocktail extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     console.log(this.props);
 
+    //Set initial state
     this.state = {
       name: '',
       ingredients: [],

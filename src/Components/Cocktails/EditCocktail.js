@@ -24,6 +24,7 @@ export default class EditCocktail extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     console.log(this.props);
 
+    //Set initial state
     this.state = {
       cocktailID: this.props.match.params.id,
       name: '',
