@@ -1,7 +1,10 @@
+import { Box } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteDialog from '../DeleteDialog';
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -13,12 +16,15 @@ export default class CocktailListItem extends React.Component {
   constructor(props) {
     super(props);
     //func binding
+    this.deleteRecipe = this.deleteRecipe.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.openDeleteDialog = this.openDeleteDialog.bind(this);
 
     //Set initial state
     this.state = {
       recipe: { ...props },
       ingredientList: [],
-      spacing: 8,
+      openDeleteDialog: false,
     };
   }
 
@@ -49,21 +55,51 @@ export default class CocktailListItem extends React.Component {
     }
   }
 
+  deleteRecipe() {
+    axios
+      .delete(ServerUrl + 'recipe/' + this.state.recipe._id)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  handleClose(value) {
+    this.setState({ openDeleteDialog: false });
+    if (value.target.parentNode.id === 'Yes') this.deleteRecipe();
+  }
+
+  openDeleteDialog() {
+    this.setState({ openDeleteDialog: true });
+  }
+
   render() {
     return (
       <ListItem>
-        <Link to={'/cocktail/' + this.state.recipe._id}>
-          <ListItemText
-            primary={this.state.recipe.name}
-            secondary={this.state.ingredientList.join(', ')}
-          />
-        </Link>
-
+        <Box width='100%'>
+          <Link to={'/cocktail/' + this.state.recipe._id}>
+            <ListItemText
+              primary={this.state.recipe.name}
+              secondary={this.state.ingredientList.join(', ')}
+            />
+          </Link>
+        </Box>
         <Link to={'/cocktail/edit/' + this.state.recipe._id} ml={10}>
           <ListItemIcon>
             <EditIcon />
           </ListItemIcon>
         </Link>
+        <ListItemIcon onClick={this.openDeleteDialog}>
+          <DeleteIcon />
+        </ListItemIcon>
+        <DeleteDialog
+          open={this.state.openDeleteDialog}
+          handleClose={this.handleClose}
+          name={this.state.recipe.name}
+        />
       </ListItem>
     );
   }

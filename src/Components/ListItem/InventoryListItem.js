@@ -3,6 +3,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteDialog from '../DeleteDialog';
 
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -27,6 +29,28 @@ export default class InventoryListItem extends React.Component {
     };
   }
 
+  deleteIngredient() {
+    axios
+      .delete(ServerUrl + 'inventory/' + this.state.ingredient._id)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  handleClose(value) {
+    console.log(value.target.parentNode.id);
+    this.setState({ open: false, selectedValue: value });
+    if (value.target.parentNode.id === 'Yes') this.deleteIngredient();
+  }
+
+  openDeleteDialog() {
+    this.setState({ open: true });
+  }
+
   render() {
     return (
       <ListItem>
@@ -43,6 +67,14 @@ export default class InventoryListItem extends React.Component {
             <EditIcon />
           </ListItemIcon>
         </Link>
+        <ListItemIcon onClick={this.openDeleteDialog}>
+          <DeleteIcon />
+        </ListItemIcon>
+        <DeleteDialog
+          open={this.state.open}
+          handleClose={this.handleClose}
+          name={this.state.ingredient.name}
+        />
       </ListItem>
     );
   }
