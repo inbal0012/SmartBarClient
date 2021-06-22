@@ -112,6 +112,7 @@ export default class SimpleTabs extends React.Component {
 
   addNewIngredient() {
     console.log('ingredient fab clicked');
+    this.props.history.push('/inventory/add');
   }
 
   render() {
