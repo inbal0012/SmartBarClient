@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import Alert from '@material-ui/lab/Alert';
+import { Component } from 'react';
 
 import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
@@ -92,15 +91,25 @@ export default class EditIngredient extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
-    const updatedIngredient = {
+    console.log(Number(this.state.remaining));
+    let updatedIngredient = {
       name: this.state.name,
       category: this.state.category,
       alcoholPercentage: this.state.alcoholPercentage,
       isAvailable: this.state.isAvailable,
-      remaining: Number(this.state.remaining),
       minRequired: Number(this.state.minRequired),
     };
+    if (Number(this.state.remaining) > 0) {
+      updatedIngredient = {
+        ...updatedIngredient,
+        remaining: Number(this.state.remaining),
+      };
+    } else {
+      updatedIngredient = {
+        ...updatedIngredient,
+        use: -Number(this.state.remaining),
+      };
+    }
     console.log(updatedIngredient);
 
     axios
