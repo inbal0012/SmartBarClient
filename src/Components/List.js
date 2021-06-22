@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   absolute: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
+    position: 'fixed',
+    top: theme.spacing(2),
     right: theme.spacing(3),
   },
 }));
@@ -32,7 +32,7 @@ export default function MyList(props) {
     <div className={classes.root}>
       <Tooltip title='Add' aria-label='add' placement='bottom-end'>
         <Fab
-          color='primary'
+          color='secondary'
           className={classes.absolute}
           onClick={props.fabOnClick}
         >
