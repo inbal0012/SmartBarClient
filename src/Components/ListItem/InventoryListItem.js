@@ -15,7 +15,7 @@ import ServerUrl from '../../typesAndConsts';
 export default class InventoryListItem extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
     //func binding
     this.deleteRecipe = this.deleteIngredient.bind(this);
     this.handleClose = this.handleClose.bind(this);

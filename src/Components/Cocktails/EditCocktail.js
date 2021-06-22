@@ -53,20 +53,12 @@ export default class EditCocktail extends Component {
           ing[1].name,
           ing[2],
         ]);
-        this.setState(
-          {
-            name: res.data.name,
-            ingredients: ings,
-            method: res.data.method,
-            portion: res.data.portion,
-          },
-          () => {
-            // this.setState({
-            //   form: (
-            //   ),
-            // });
-          }
-        );
+        this.setState({
+          name: res.data.name,
+          ingredients: ings,
+          method: res.data.method,
+          portion: res.data.portion,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -160,10 +152,7 @@ export default class EditCocktail extends Component {
       .patch(ServerUrl + 'recipe/' + this.state.cocktailID, UpdatedRecipe)
       .then((res) => {
         console.log(res.data);
-        this.props.history.push('/');
-        // this.setState({
-        //   cocktail: { ...res.data },
-        // });
+        if (res.data.result.success) this.props.history.push('/');
       })
       .catch((err) => {
         console.log(err);
@@ -193,7 +182,7 @@ export default class EditCocktail extends Component {
           newStepAdded={this.newStepAdded}
           portion={this.state.portion}
           onChangePortion={this.onChangePortion}
-          submitTitle={'Update Recipe'}
+          submitTitle={'Save Changes'}
         />
       );
     return (
