@@ -7,7 +7,7 @@ import IngredientForm from './IngredientForm';
 export default class EditIngredient extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
+
     //func binding
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeCategory = this.onChangeCategory.bind(this);
@@ -91,7 +91,6 @@ export default class EditIngredient extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log(Number(this.state.remaining));
     let updatedIngredient = {
       name: this.state.name,
       category: this.state.category,
@@ -110,7 +109,6 @@ export default class EditIngredient extends Component {
         use: -Number(this.state.remaining),
       };
     }
-    console.log(updatedIngredient);
 
     axios
       .patch(

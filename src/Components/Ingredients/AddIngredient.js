@@ -77,7 +77,6 @@ export default class AddIngredient extends Component {
       remaining: this.state.remaining,
       minRequired: this.state.minRequired,
     };
-    console.log(newIngredient);
 
     axios
       .post(ServerUrl + 'inventory/', newIngredient)
