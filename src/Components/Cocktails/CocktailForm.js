@@ -9,7 +9,6 @@ import Divider from '@material-ui/core/Divider';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    background: theme.palette.divider,
   },
   paper: {
     padding: theme.spacing(1),
@@ -29,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CocktailForm(props) {
-  console.log(props);
-
   const classes = useStyles();
   return (
     <form onSubmit={props.onSubmit} className={classes.root}>
@@ -52,12 +49,50 @@ function CocktailForm(props) {
         <List>
           {
             //TODO add delete ing button
-            props.ingredients.map((ing, index) => (
-              <ListItem divider key={index}>
-                {ing[0]} {ing[1]} {ing[2] ? '(optional)' : ''}
-                {/* <Button onClick={this.deleteIngredient}>X</Button> */}
-              </ListItem>
-            ))
+            props.ingredients.map((ingredient, index) => {
+              return (
+                <ListItem divider key={index.toString()}>
+                  <TextField
+                    id='amount'
+                    type='number'
+                    className={classes.textField}
+                    label='amount'
+                    value={ingredient[0]}
+                    onChange={(event) => props.updateIngredient(event, index)}
+                  />
+                  <TextField
+                    id='ingName'
+                    type='text'
+                    className={classes.textField}
+                    label='ingredient name'
+                    value={ingredient[1]}
+                    onChange={(event) => props.updateIngredient(event, index)}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        id='Optional'
+                        name='checkedB'
+                        color='primary'
+                        checked={ingredient[2]}
+                        onChange={(event) =>
+                          props.updateIngredient(event, index)
+                        }
+                      />
+                    }
+                    label='Is Optional'
+                  />
+                  <Button
+                    key={index}
+                    color='primary'
+                    variant='contained'
+                    onClick={() => props.deleteIngredient(index)}
+                  >
+                    X
+                  </Button>
+                </ListItem>
+              );
+            })
           }
         </List>
 
@@ -102,8 +137,25 @@ function CocktailForm(props) {
       <FormGroup>
         <label>Method: </label>
         <List>
-          {props.method.map((step) => (
-            <ListItem>{step}</ListItem>
+          {props.method.map((step, index) => (
+            <ListItem>
+              <TextField
+                id='ingName'
+                type='text'
+                className={classes.textField}
+                label='ingredient name'
+                value={step}
+                onChange={(event) => props.updateMethod(event, index)}
+              />
+              <Button
+                key={index}
+                color='primary'
+                variant='contained'
+                onClick={() => props.deleteStep(index)}
+              >
+                X
+              </Button>
+            </ListItem>
           ))}
         </List>
 
@@ -140,11 +192,7 @@ function CocktailForm(props) {
       </FormGroup>
       <Divider className={classes.divider} />
       <FormGroup>
-        <Button
-          variant='contained'
-          onClick={props.newIngredientAdded}
-          color='primary'
-        >
+        <Button variant='contained' onClick={props.onSubmit} color='primary'>
           {props.submitTitle}
         </Button>
       </FormGroup>

@@ -12,17 +12,21 @@ export default class EditCocktail extends Component {
     //#region New Ing
     this.newIngredientAdded = this.newIngredientAdded.bind(this);
     this.deleteIngredient = this.deleteIngredient.bind(this);
+    this.updateIngredient = this.updateIngredient.bind(this);
     this.onChangeNewIngName = this.onChangeNewIngName.bind(this);
     this.onChangeNewIngAmount = this.onChangeNewIngAmount.bind(this);
     this.onChangeNewIngIsOptional = this.onChangeNewIngIsOptional.bind(this);
     //#endregion
+    //#region Method
     this.onChangeNewStep = this.onChangeNewStep.bind(this);
     this.newStepAdded = this.newStepAdded.bind(this);
+    this.updateMethod = this.updateMethod.bind(this);
+    this.deleteStep = this.deleteStep.bind(this);
+    //#endregion
 
     this.onChangePortion = this.onChangePortion.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
-    console.log(this.props);
 
     //Set initial state
     this.state = {
@@ -66,14 +70,12 @@ export default class EditCocktail extends Component {
   }
 
   onChangeName(e) {
-    console.log(e.target.value);
     this.setState({
       name: e.target.value,
     });
   }
   // #region New Ingredient
   newIngredientAdded(e) {
-    console.log(e);
     // Todo Validate
     if (this.state.newIngAmount <= 0) {
       // TODO
@@ -92,8 +94,29 @@ export default class EditCocktail extends Component {
     });
   }
 
-  deleteIngredient(e) {
-    console.log(e);
+  deleteIngredient(key) {
+    let newIngredientList = this.state.ingredients;
+    newIngredientList.splice(key, 1);
+    this.setState({ ingredients: newIngredientList });
+  }
+
+  updateIngredient(event, key) {
+    let newIngredientList = this.state.ingredients;
+    switch (event.target.id) {
+      case 'amount':
+        newIngredientList[key][0] = event.target.value;
+        break;
+      case 'ingName':
+        newIngredientList[key][1] = event.target.value;
+        break;
+      case 'Optional':
+        newIngredientList[key][2] = !newIngredientList[key][2];
+        break;
+      default:
+        break;
+    }
+
+    this.setState({ ingredients: newIngredientList });
   }
 
   onChangeNewIngAmount(e) {
@@ -114,7 +137,7 @@ export default class EditCocktail extends Component {
     });
   }
   // #endregion New Ingredient
-
+  // #region Method
   onChangeNewStep(e) {
     this.setState({
       newStep: e.target.value,
@@ -122,7 +145,6 @@ export default class EditCocktail extends Component {
   }
 
   newStepAdded(e) {
-    console.log(e);
     // Todo Validate
 
     this.setState({
@@ -130,6 +152,19 @@ export default class EditCocktail extends Component {
       newStep: '',
     });
   }
+
+  updateMethod(event, key) {
+    let newMethodList = this.state.method;
+    newMethodList[key] = event.target.value;
+    this.setState({ method: newMethodList });
+  }
+
+  deleteStep(key) {
+    let newMethodList = this.state.method;
+    newMethodList.splice(key, 1);
+    this.setState({ method: newMethodList });
+  }
+  // #endregion Method
 
   onChangePortion(e) {
     this.setState({
@@ -146,7 +181,6 @@ export default class EditCocktail extends Component {
       method: this.state.method,
       portion: this.state.portion,
     };
-    console.log('submitted ' + UpdatedRecipe);
 
     axios
       .patch(ServerUrl + 'recipe/' + this.state.cocktailID, UpdatedRecipe)
@@ -176,10 +210,14 @@ export default class EditCocktail extends Component {
           newIngIsOptional={this.state.newIngIsOptional}
           onChangeNewIngIsOptional={this.onChangeNewIngIsOptional}
           newIngredientAdded={this.newIngredientAdded}
+          deleteIngredient={this.deleteIngredient}
+          updateIngredient={this.updateIngredient}
           method={this.state.method}
           newStep={this.state.newStep}
           onChangeNewStep={this.onChangeNewStep}
           newStepAdded={this.newStepAdded}
+          updateMethod={this.updateMethod}
+          deleteStep={this.deleteStep}
           portion={this.state.portion}
           onChangePortion={this.onChangePortion}
           submitTitle={'Save Changes'}
