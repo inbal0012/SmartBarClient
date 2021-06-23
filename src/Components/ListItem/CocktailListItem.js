@@ -17,7 +17,7 @@ export default class CocktailListItem extends React.Component {
     super(props);
     //func binding
     this.deleteRecipe = this.deleteRecipe.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
     this.openDeleteDialog = this.openDeleteDialog.bind(this);
 
     //Set initial state
@@ -67,7 +67,7 @@ export default class CocktailListItem extends React.Component {
       });
   }
 
-  handleClose(value) {
+  closeDeleteDialog(value) {
     this.setState({ openDeleteDialog: false });
     if (value.target.parentNode.id === 'Yes') this.deleteRecipe();
   }
@@ -97,7 +97,7 @@ export default class CocktailListItem extends React.Component {
         </ListItemIcon>
         <DeleteDialog
           open={this.state.openDeleteDialog}
-          handleClose={this.handleClose}
+          handleClose={this.closeDeleteDialog}
           name={this.state.recipe.name}
         />
       </ListItem>

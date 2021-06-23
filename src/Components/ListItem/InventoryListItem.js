@@ -18,7 +18,7 @@ export default class InventoryListItem extends React.Component {
 
     //func binding
     this.deleteRecipe = this.deleteIngredient.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
     this.openDeleteDialog = this.openDeleteDialog.bind(this);
 
     //Set initial state
@@ -41,7 +41,7 @@ export default class InventoryListItem extends React.Component {
       });
   }
 
-  handleClose(value) {
+  closeDeleteDialog(value) {
     console.log(value.target.parentNode.id);
     this.setState({ open: false, selectedValue: value });
     if (value.target.parentNode.id === 'Yes') this.deleteIngredient();
@@ -72,7 +72,7 @@ export default class InventoryListItem extends React.Component {
         </ListItemIcon>
         <DeleteDialog
           open={this.state.open}
-          handleClose={this.handleClose}
+          handleClose={this.closeDeleteDialog}
           name={this.state.ingredient.name}
         />
       </ListItem>
