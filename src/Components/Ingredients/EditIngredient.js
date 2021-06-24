@@ -3,6 +3,7 @@ import { Component } from 'react';
 import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
 import IngredientForm from './IngredientForm';
+import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';
 
 export default class EditIngredient extends Component {
   constructor(props) {
@@ -94,11 +95,16 @@ export default class EditIngredient extends Component {
     let updatedIngredient = {
       name: this.state.name,
       category: this.state.category,
-      alcoholPercentage: this.state.alcoholPercentage,
+      alcoholPercentage: Number(this.state.alcoholPercentage),
       isAvailable: this.state.isAvailable,
       minRequired: Number(this.state.minRequired),
     };
-    if (Number(this.state.remaining) > 0) {
+    if (BooleanInventoryItem.isABooleanCategory(this.state.category)) {
+      updatedIngredient = {
+        ...updatedIngredient,
+        remaining: this.state.isAvailable,
+      };
+    } else if (Number(this.state.remaining) > 0) {
       updatedIngredient = {
         ...updatedIngredient,
         remaining: Number(this.state.remaining),
