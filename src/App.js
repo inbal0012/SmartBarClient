@@ -24,7 +24,7 @@ function App() {
         />
 
         <Route path='/inventory/edit/:id' exact component={EditIngredient} />
-        <Route path='/inventory/add' exact component={AddIngredient} />
+        <Route path='/ingredients/add' exact component={AddIngredient} />
         <Route path='/inventory/:id' exact component={ShowIngredient} />
       </div>
     </Router>
