@@ -49,49 +49,51 @@ export default class EditIngredient extends Component {
           minRequired: res.data.minRequired,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
-  onChangeName(e) {
+  onChangeName(event) {
     this.setState({
-      name: e.target.value,
+      name: event.target.value,
     });
   }
 
-  onChangeCategory(e) {
+  onChangeCategory(event) {
     this.setState({
-      category: e.target.value,
+      category: event.target.value,
     });
   }
 
-  onChangeAlcoholPercentage(e) {
+  onChangeAlcoholPercentage(event) {
     this.setState({
-      alcoholPercentage: e.target.value,
+      alcoholPercentage: event.target.value,
     });
   }
 
-  onChangeRemaining(e) {
+  onChangeRemaining(event) {
     this.setState({
-      remaining: e.target.value,
+      remaining: event.target.value,
     });
   }
 
-  onChangeIsAvailable(e) {
+  onChangeIsAvailable(event) {
     this.setState({
       isAvailable: !this.state.isAvailable,
     });
   }
 
-  onChangeMinRequired(e) {
+  onChangeMinRequired(event) {
     this.setState({
-      minRequired: e.target.value,
+      minRequired: event.target.value,
     });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
     let updatedIngredient = {
       name: this.state.name,
       category: this.state.category,
@@ -125,8 +127,10 @@ export default class EditIngredient extends Component {
         console.log(res.data);
         if (res.data.result.success) this.props.history.push('/');
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 

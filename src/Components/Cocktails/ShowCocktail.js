@@ -38,7 +38,6 @@ export default class ShowCocktail extends Component {
     axios
       .get(ServerUrl + 'recipe/' + this.state.cocktailID)
       .then((res) => {
-        console.log(res.data.ingredients);
         let ingredientsStrList = res.data.ingredients.map((ing) => [
           ing[0],
           ing[1].name,
@@ -52,8 +51,10 @@ export default class ShowCocktail extends Component {
           ingredientsFullData: res.data.ingredients,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
 
     axios
@@ -65,8 +66,10 @@ export default class ShowCocktail extends Component {
           availableReason: res.data.reason,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
@@ -82,11 +85,13 @@ export default class ShowCocktail extends Component {
         // });
         this.props.history.push({
           pathname: '/EnjoyYourCocktail/' + res.data,
-          state: { output: res.data },
+          state: this.state,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 

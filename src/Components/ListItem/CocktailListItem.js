@@ -49,8 +49,10 @@ export default class CocktailListItem extends React.Component {
             ingredientList: [...this.state.ingredientList, res.data.name],
           });
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(({ response }) => {
+          if (response) {
+            console.log(response.data);
+          }
         });
     }
   }
@@ -62,8 +64,10 @@ export default class CocktailListItem extends React.Component {
         console.log(res.data);
         window.location.reload(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 

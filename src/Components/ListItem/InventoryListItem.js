@@ -36,13 +36,14 @@ export default class InventoryListItem extends React.Component {
         console.log(res.data);
         window.location.reload(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
   closeDeleteDialog(value) {
-    console.log(value.target.parentNode.id);
     this.setState({ open: false, selectedValue: value });
     if (value.target.parentNode.id === 'Yes') this.deleteIngredient();
   }

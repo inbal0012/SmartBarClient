@@ -42,14 +42,13 @@ export default class AddCocktail extends Component {
     };
   }
 
-  onChangeName(e) {
+  onChangeName(event) {
     this.setState({
-      name: e.target.value,
+      name: event.target.value,
     });
   }
   // #region New Ingredient
-  newIngredientAdded(e) {
-    console.log(e);
+  newIngredientAdded(event) {
     // Todo Validate
     if (this.state.newIngAmount <= 0) {
       // TODO
@@ -93,33 +92,32 @@ export default class AddCocktail extends Component {
     this.setState({ ingredients: newIngredientList });
   }
 
-  onChangeNewIngAmount(e) {
+  onChangeNewIngAmount(event) {
     this.setState({
-      newIngAmount: e.target.value,
+      newIngAmount: event.target.value,
     });
   }
 
-  onChangeNewIngName(e) {
+  onChangeNewIngName(event) {
     this.setState({
-      newIngName: e.target.value,
+      newIngName: event.target.value,
     });
   }
 
-  onChangeNewIngIsOptional(e) {
+  onChangeNewIngIsOptional(event) {
     this.setState({
       newIngIsOptional: !this.state.newIngIsOptional,
     });
   }
   // #endregion New Ingredient
   // #region Method
-  onChangeNewStep(e) {
+  onChangeNewStep(event) {
     this.setState({
-      newStep: e.target.value,
+      newStep: event.target.value,
     });
   }
 
-  newStepAdded(e) {
-    console.log(e);
+  newStepAdded(event) {
     // Todo Validate
 
     this.setState({
@@ -141,14 +139,14 @@ export default class AddCocktail extends Component {
   }
   // #endregion Method
 
-  onChangePortion(e) {
+  onChangePortion(event) {
     this.setState({
-      portion: e.target.value,
+      portion: event.target.value,
     });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
 
     const newRecipe = {
       name: this.state.name,
@@ -161,13 +159,15 @@ export default class AddCocktail extends Component {
       .post(ServerUrl + 'recipe/', newRecipe)
       .then((res) => {
         console.log(res.data);
-        this.props.history.push('/');
+        this.props.history.push('/cocktail/' + res.data._id);
         // this.setState({
         //   cocktail: { ...res.data },
         // });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 

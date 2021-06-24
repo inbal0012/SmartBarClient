@@ -64,18 +64,20 @@ export default class EditCocktail extends Component {
           portion: res.data.portion,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
-  onChangeName(e) {
+  onChangeName(event) {
     this.setState({
-      name: e.target.value,
+      name: event.target.value,
     });
   }
   // #region New Ingredient
-  newIngredientAdded(e) {
+  newIngredientAdded(event) {
     // Todo Validate
     if (this.state.newIngAmount <= 0) {
       // TODO
@@ -119,32 +121,32 @@ export default class EditCocktail extends Component {
     this.setState({ ingredients: newIngredientList });
   }
 
-  onChangeNewIngAmount(e) {
+  onChangeNewIngAmount(event) {
     this.setState({
-      newIngAmount: e.target.value,
+      newIngAmount: event.target.value,
     });
   }
 
-  onChangeNewIngName(e) {
+  onChangeNewIngName(event) {
     this.setState({
-      newIngName: e.target.value,
+      newIngName: event.target.value,
     });
   }
 
-  onChangeNewIngIsOptional(e) {
+  onChangeNewIngIsOptional(event) {
     this.setState({
       newIngIsOptional: !this.state.newIngIsOptional,
     });
   }
   // #endregion New Ingredient
   // #region Method
-  onChangeNewStep(e) {
+  onChangeNewStep(event) {
     this.setState({
-      newStep: e.target.value,
+      newStep: event.target.value,
     });
   }
 
-  newStepAdded(e) {
+  newStepAdded(event) {
     // Todo Validate
 
     this.setState({
@@ -166,14 +168,14 @@ export default class EditCocktail extends Component {
   }
   // #endregion Method
 
-  onChangePortion(e) {
+  onChangePortion(event) {
     this.setState({
-      portion: e.target.value,
+      portion: event.target.value,
     });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
 
     const UpdatedRecipe = {
       name: this.state.name,
@@ -188,8 +190,10 @@ export default class EditCocktail extends Component {
         console.log(res.data);
         if (res.data.result.success) this.props.history.push('/');
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
