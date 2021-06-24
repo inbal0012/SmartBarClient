@@ -92,27 +92,29 @@ export default class SimpleTabs extends React.Component {
       .then((res) => {
         this.setState({ Inventory: res.data });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
     axios
       .get(ServerUrl + 'recipe')
       .then((res) => {
         this.setState({ Recipes: res.data });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(({ response }) => {
+        if (response) {
+          console.log(response.data);
+        }
       });
   }
 
   addNewCocktail() {
-    console.log('cocktails fab clicked');
     this.props.history.push('/cocktails/add');
   }
 
   addNewIngredient() {
-    console.log('ingredient fab clicked');
-    this.props.history.push('/inventory/add');
+    this.props.history.push('/ingredients/add');
   }
 
   render() {
