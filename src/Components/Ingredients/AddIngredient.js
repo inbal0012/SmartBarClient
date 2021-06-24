@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import Alert from '@material-ui/lab/Alert';
-
+import { Component } from 'react';
 import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
 import IngredientForm from './IngredientForm';
+import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';
 
 export default class AddIngredient extends Component {
   constructor(props) {
@@ -21,12 +20,12 @@ export default class AddIngredient extends Component {
 
     //Set initial state
     this.state = {
-      name: '',
-      category: '',
+      name: undefined,
+      category: undefined,
       alcoholPercentage: 0,
       isAvailable: true,
-      remaining: '',
-      minRequired: '',
+      remaining: undefined,
+      minRequired: undefined,
     };
   }
 
@@ -69,14 +68,24 @@ export default class AddIngredient extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const newIngredient = {
+    let newIngredient = {
       name: this.state.name,
       category: this.state.category,
-      alcoholPercentage: this.state.alcoholPercentage,
+      alcoholPercentage: Number(this.state.alcoholPercentage),
       isAvailable: this.state.isAvailable,
-      remaining: this.state.remaining,
-      minRequired: this.state.minRequired,
+      minRequired: Number(this.state.minRequired),
     };
+    if (BooleanInventoryItem.isABooleanCategory(this.state.category)) {
+      newIngredient = {
+        ...newIngredient,
+        remaining: this.state.isAvailable,
+      };
+    } else {
+      newIngredient = {
+        ...newIngredient,
+        remaining: Number(this.state.remaining),
+      };
+    }
 
     axios
       .post(ServerUrl + 'inventory/', newIngredient)
