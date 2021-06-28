@@ -8,6 +8,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
@@ -74,6 +75,12 @@ function IngredientForm(props) {
           placeholder='Alcohol Percentage'
           value={props.alcoholPercentage}
           onChange={props.onChangeAlcoholPercentage}
+          error={props.alcoholPercentageError}
+          helperText={
+            props.alcoholPercentageError
+              ? props.alcoholPercentageHelperText
+              : ''
+          }
         />
       </FormGroup>
     </React.Fragment>
@@ -106,6 +113,8 @@ function IngredientForm(props) {
           placeholder='Amount'
           value={props.remaining}
           onChange={props.onChangeRemaining}
+          error={props.remainingError}
+          helperText={props.remainingError ? props.remainingHelperText : ''}
         />
       </FormGroup>
       <Divider className={classes.divider} />
@@ -119,6 +128,8 @@ function IngredientForm(props) {
           className={classes.textField}
           value={props.minRequired}
           onChange={props.onChangeMinRequired}
+          error={props.minRequiredError}
+          helperText={props.minRequiredError ? props.minRequiredHelperText : ''}
         />
       </FormGroup>
     </React.Fragment>
@@ -135,12 +146,17 @@ function IngredientForm(props) {
           placeholder='Ingredient Name'
           value={props.name}
           onChange={props.onChangeName}
+          error={props.nameError}
+          helperText={props.nameError ? props.nameHelperText : ''}
         />
       </FormGroup>
       <Divider className={classes.divider} />
       <FormGroup>
         <label>Category: </label>
-        <FormControl className={classes.formControl}>
+        <FormControl
+          className={classes.formControl}
+          error={props.categoryError}
+        >
           <Select
             id='demo-simple-select'
             value={props.category}
@@ -154,6 +170,9 @@ function IngredientForm(props) {
               );
             })}
           </Select>
+          <FormHelperText id='my-helper-text'>
+            {props.categoryHelperText}
+          </FormHelperText>
         </FormControl>
       </FormGroup>
       {alcoholPercentageSection}

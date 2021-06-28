@@ -4,6 +4,7 @@ import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
 import IngredientForm from './IngredientForm';
 import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';
+import { Bottle } from '../../common/src/Model/InventoryModel/Bottle';
 
 export default class EditIngredient extends Component {
   constructor(props) {
@@ -57,6 +58,14 @@ export default class EditIngredient extends Component {
   }
 
   onChangeName(event) {
+    if (event.target.value === '' || event.target.value === undefined) {
+      this.setState({
+        nameError: true,
+        nameHelperText: 'Evert ingredient MUST have a name',
+      });
+    } else {
+      this.setState({ nameError: false });
+    }
     this.setState({
       name: event.target.value,
     });
@@ -69,12 +78,18 @@ export default class EditIngredient extends Component {
   }
 
   onChangeAlcoholPercentage(event) {
+    this.validate(
+      'alcoholPercentage',
+      'Alcohol Percentage',
+      Number(event.target.value)
+    );
     this.setState({
       alcoholPercentage: event.target.value,
     });
   }
 
   onChangeRemaining(event) {
+    this.validate('remaining', 'Remaining', Number(event.target.value));
     this.setState({
       remaining: event.target.value,
     });
@@ -87,6 +102,12 @@ export default class EditIngredient extends Component {
   }
 
   onChangeMinRequired(event) {
+    this.validate(
+      'minRequired',
+      'Minimum Required',
+      Number(event.target.value)
+    );
+
     this.setState({
       minRequired: event.target.value,
     });
@@ -94,6 +115,41 @@ export default class EditIngredient extends Component {
 
   onSubmit(event) {
     event.preventDefault();
+    let isOK = true;
+    let validation;
+    if (this.state.name === '' || this.state.name === undefined) {
+      this.setState({
+        nameError: true,
+        nameHelperText: 'Evert ingredient MUST have a name',
+      });
+    }
+    if (Bottle.isAAlcoholCategory(this.state.category)) {
+      validation = this.validate(
+        'alcoholPercentage',
+        'Alcohol Percentage',
+        Number(this.state.alcoholPercentage)
+      );
+      isOK = isOK && validation;
+    }
+    if (!BooleanInventoryItem.isABooleanCategory(this.state.category)) {
+      //remaining
+      validation = this.validate(
+        'remaining',
+        'Remaining',
+        Number(this.state.remaining)
+      );
+      isOK = isOK && validation;
+      //minRequired
+      validation = this.validate(
+        'minRequired',
+        'Minimum Required',
+        Number(this.state.minRequired)
+      );
+      isOK = isOK && validation;
+    }
+
+    if (!isOK) return;
+
     let updatedIngredient = {
       name: this.state.name,
       category: this.state.category,
@@ -134,6 +190,48 @@ export default class EditIngredient extends Component {
       });
   }
 
+  validate(param, displayName, newValue) {
+    console.log(newValue);
+    let validation = this.validatePositiveAndNumber(
+      displayName,
+      Number(newValue)
+    );
+    let error = param + 'Error';
+    if (!validation.success) {
+      let helperText = param + 'HelperText';
+      console.log({ error, helperText });
+      this.setState({
+        [error]: true,
+        [helperText]: validation.reason,
+      });
+      return false;
+    } else {
+      this.setState({
+        [error]: false,
+      });
+      return true;
+    }
+  }
+
+  validatePositiveAndNumber(param, newValue) {
+    if (typeof newValue !== 'number')
+      return {
+        success: false,
+        reason: param + ' has to be a number',
+      };
+
+    if (newValue <= 0)
+      return {
+        success: false,
+        reason: param + " can't be 0 or lower",
+      };
+
+    return {
+      success: true,
+      reason: '',
+    };
+  }
+
   render() {
     return (
       <div>
@@ -143,16 +241,26 @@ export default class EditIngredient extends Component {
           submitTitle={'Save Changes'}
           name={this.state.name}
           onChangeName={this.onChangeName}
+          nameError={this.state.nameError}
+          nameHelperText={this.state.nameHelperText}
           category={this.state.category}
           onChangeCategory={this.onChangeCategory}
+          categoryError={this.state.categoryError}
+          categoryHelperText={this.state.categoryHelperText}
           alcoholPercentage={this.state.alcoholPercentage}
           onChangeAlcoholPercentage={this.onChangeAlcoholPercentage}
+          alcoholPercentageError={this.state.alcoholPercentageError}
+          alcoholPercentageHelperText={this.state.alcoholPercentageHelperText}
           IsAvailable={this.state.isAvailable}
           onChangeIsAvailable={this.onChangeIsAvailable}
           remaining={this.state.remaining}
           onChangeRemaining={this.onChangeRemaining}
+          remainingError={this.state.remainingError}
+          remainingHelperText={this.state.remainingHelperText}
           minRequired={this.state.minRequired}
           onChangeMinRequired={this.onChangeMinRequired}
+          minRequiredError={this.state.minRequiredError}
+          minRequiredHelperText={this.state.minRequiredHelperText}
         />
       </div>
     );
