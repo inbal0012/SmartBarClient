@@ -1,4 +1,8 @@
 import React from 'react';
+import EInventoryCategory from '../../common/src/Enums/EInventoryCategory';
+import { Bottle } from '../../common/src/Model/InventoryModel/Bottle';
+import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';
+
 import {
   Button,
   makeStyles,
@@ -12,9 +16,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
-import EInventoryCategory from '../../common/src/Enums/EInventoryCategory';
-import { Bottle } from '../../common/src/Model/InventoryModel/Bottle';
-import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -184,6 +190,26 @@ function IngredientForm(props) {
           {props.submitTitle}
         </Button>
       </FormGroup>
+      <Dialog
+        open={props.openErrorDialog}
+        onClose={props.closeErrorDialog}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>
+          {props.ErrorDialogTitle}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            {props.ErrorDialogContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.closeErrorDialog} color='primary'>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 }

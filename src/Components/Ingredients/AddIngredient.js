@@ -18,6 +18,7 @@ export default class AddIngredient extends Component {
     this.onChangeMinRequired = this.onChangeMinRequired.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.closeErrorDialog = this.closeErrorDialog.bind(this);
 
     //Set initial state
     this.state = {
@@ -151,8 +152,17 @@ export default class AddIngredient extends Component {
       .catch(({ response }) => {
         if (response) {
           console.log(response.data);
+          this.setState({
+            openErrorDialog: true,
+            ErrorDialogTitle: "Server problems. Can't create ingredient",
+            ErrorDialogContent: response.data.message,
+          });
         }
       });
+  }
+
+  closeErrorDialog() {
+    this.setState({ openErrorDialog: false });
   }
 
   validate(param, displayName, newValue) {
@@ -163,7 +173,6 @@ export default class AddIngredient extends Component {
     let error = param + 'Error';
     if (!validation.success) {
       let helperText = param + 'HelperText';
-      console.log({ error, helperText });
       this.setState({
         [error]: true,
         [helperText]: validation.reason,
@@ -178,7 +187,6 @@ export default class AddIngredient extends Component {
   }
 
   validatePositiveAndNumber(param, newValue) {
-    console.log({ param, newValue });
     if (typeof newValue !== 'number' || isNaN(newValue))
       return {
         success: false,
@@ -226,6 +234,10 @@ export default class AddIngredient extends Component {
           onChangeMinRequired={this.onChangeMinRequired}
           minRequiredError={this.state.minRequiredError}
           minRequiredHelperText={this.state.minRequiredHelperText}
+          openErrorDialog={this.state.openErrorDialog}
+          closeErrorDialog={this.closeErrorDialog}
+          ErrorDialogTitle={this.state.ErrorDialogTitle}
+          ErrorDialogContent={this.state.ErrorDialogContent}
         />
       </div>
     );

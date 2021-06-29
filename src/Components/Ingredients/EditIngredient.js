@@ -19,6 +19,7 @@ export default class EditIngredient extends Component {
     this.onChangeMinRequired = this.onChangeMinRequired.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.closeErrorDialog = this.closeErrorDialog.bind(this);
 
     //Set initial state
     this.state = {
@@ -182,16 +183,33 @@ export default class EditIngredient extends Component {
       .then((res) => {
         console.log(res.data);
         if (res.data.result.success) this.props.history.push('/');
+        else {
+          this.setState({
+            openErrorDialog: true,
+            ErrorDialogTitle: "Server problems. Can't update ingredient",
+            ErrorDialogContent: res.data.result.reason,
+          });
+        }
       })
       .catch(({ response }) => {
         if (response) {
           console.log(response.data);
+
+          // let errorList = result.reason.map((error) => <p>{error}</p>);
+          this.setState({
+            openErrorDialog: true,
+            ErrorDialogTitle: "Server problems. Can't update ingredient",
+            ErrorDialogContent: response.data.message,
+          });
         }
       });
   }
 
+  closeErrorDialog() {
+    this.setState({ openErrorDialog: false });
+  }
+
   validate(param, displayName, newValue) {
-    console.log(newValue);
     let validation = this.validatePositiveAndNumber(
       displayName,
       Number(newValue)
@@ -199,7 +217,6 @@ export default class EditIngredient extends Component {
     let error = param + 'Error';
     if (!validation.success) {
       let helperText = param + 'HelperText';
-      console.log({ error, helperText });
       this.setState({
         [error]: true,
         [helperText]: validation.reason,
@@ -261,6 +278,10 @@ export default class EditIngredient extends Component {
           onChangeMinRequired={this.onChangeMinRequired}
           minRequiredError={this.state.minRequiredError}
           minRequiredHelperText={this.state.minRequiredHelperText}
+          openErrorDialog={this.state.openErrorDialog}
+          closeErrorDialog={this.closeErrorDialog}
+          ErrorDialogTitle={this.state.ErrorDialogTitle}
+          ErrorDialogContent={this.state.ErrorDialogContent}
         />
       </div>
     );
