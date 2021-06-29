@@ -28,6 +28,7 @@ export default function MyList(props) {
       </div>
     );
   }
+  console.log(props);
   return (
     <div className={classes.root}>
       <Tooltip title='Add' aria-label='add' placement='bottom-end'>
@@ -39,7 +40,7 @@ export default function MyList(props) {
           <AddIcon />
         </Fab>
       </Tooltip>
-
+      
       <List>
         {props.list.map((currItem, index) => {
           return <ItemType {...currItem} key={index} />;

@@ -15,6 +15,7 @@ import ServerUrl from '../../typesAndConsts';
 export default class CocktailListItem extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     //func binding
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
@@ -30,6 +31,10 @@ export default class CocktailListItem extends React.Component {
 
   componentDidMount() {
     this.getDataFromServer();
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log({ props, state });
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
