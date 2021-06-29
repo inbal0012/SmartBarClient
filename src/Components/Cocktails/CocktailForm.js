@@ -6,6 +6,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -41,6 +47,8 @@ function CocktailForm(props) {
           label='cocktail name'
           value={props.name}
           onChange={props.onChangeName}
+          error={props.nameError}
+          helperText={props.nameError ? props.nameHelperText : ''}
         />
       </FormGroup>
       <Divider className={classes.divider} />
@@ -104,6 +112,10 @@ function CocktailForm(props) {
             label='amount'
             value={props.newIngAmount}
             onChange={props.onChangeNewIngAmount}
+            error={props.newIngAmountError}
+            helperText={
+              props.newIngAmountError ? props.newIngAmountHelperText : ''
+            }
           />
           <TextField
             id='ingName'
@@ -112,6 +124,8 @@ function CocktailForm(props) {
             label='ingredient name'
             value={props.newIngName}
             onChange={props.onChangeNewIngName}
+            error={props.newIngNameError}
+            helperText={props.newIngNameError ? props.newIngNameHelperText : ''}
           />
           <FormControlLabel
             control={
@@ -167,6 +181,8 @@ function CocktailForm(props) {
             label='add step'
             value={props.newStep}
             onChange={props.onChangeNewStep}
+            error={props.newStepError}
+            helperText={props.newStepError ? props.newStepHelperText : ''}
           />
           <Button
             variant='contained'
@@ -188,6 +204,8 @@ function CocktailForm(props) {
           className={classes.textField}
           value={props.portion}
           onChange={props.onChangePortion}
+          error={props.portionError}
+          helperText={props.portionError ? props.portionHelperText : ''}
         />
       </FormGroup>
       <Divider className={classes.divider} />
@@ -196,6 +214,27 @@ function CocktailForm(props) {
           {props.submitTitle}
         </Button>
       </FormGroup>
+
+      <Dialog
+        open={props.openErrorDialog}
+        onClose={props.closeErrorDialog}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>
+          {props.ErrorDialogTitle}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            {props.ErrorDialogContent}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.closeErrorDialog} color='primary'>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 }
