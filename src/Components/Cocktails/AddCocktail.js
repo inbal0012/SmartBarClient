@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Alert from '@material-ui/lab/Alert';
 
 import axios from 'axios';
 import ServerUrl from '../../typesAndConsts';
@@ -70,7 +69,6 @@ export default class AddCocktail extends Component {
         newIngNameHelperText: "Ingredient's name can't be empty",
       });
     }
-    console.log(this.state.newIngName);
     if (!validate) {
       return;
     }
@@ -261,7 +259,6 @@ export default class AddCocktail extends Component {
       result.success = false;
       result.reason.push(validation.reason);
     }
-    console.log(result);
     if (!result.success) {
       let errorList = result.reason.map((error) => <p>{error}</p>);
       this.setState({
@@ -280,7 +277,6 @@ export default class AddCocktail extends Component {
   }
 
   validate(param, displayName, newValue) {
-    console.log(newValue);
     let validation = this.validatePositiveAndNumber(
       displayName,
       Number(newValue)
@@ -288,7 +284,6 @@ export default class AddCocktail extends Component {
     let error = param + 'Error';
     if (!validation.success) {
       let helperText = param + 'HelperText';
-      console.log({ error, helperText });
       this.setState({
         [error]: true,
         [helperText]: validation.reason,
