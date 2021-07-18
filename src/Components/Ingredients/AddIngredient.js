@@ -96,6 +96,7 @@ export default class AddIngredient extends Component {
         nameError: true,
         nameHelperText: 'Evert ingredient MUST have a name',
       });
+      isOK = false;
     }
     if (Bottle.isAAlcoholCategory(this.state.category)) {
       validation = this.validate(
@@ -211,7 +212,7 @@ export default class AddIngredient extends Component {
         <h3>New Ingredient</h3>
         <IngredientForm
           onSubmit={this.onSubmit}
-          submitTitle={'Save Changes'}
+          submitTitle={'Create Ingredient'}
           name={this.state.name}
           onChangeName={this.onChangeName}
           nameError={this.state.nameError}
