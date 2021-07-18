@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   absolute: {
     position: 'fixed',
-    top: theme.spacing(2),
+    top: theme.spacing(4),
     right: theme.spacing(3),
   },
 }));
@@ -40,7 +40,7 @@ export default function MyList(props) {
           <AddIcon />
         </Fab>
       </Tooltip>
-      
+
       <List>
         {props.list.map((currItem, index) => {
           return <ItemType {...currItem} key={index} />;

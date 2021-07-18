@@ -56,7 +56,6 @@ function CocktailForm(props) {
         <label>Ingredients: </label>
         <List>
           {
-            //TODO add delete ing button
             props.ingredients.map((ingredient, index) => {
               return (
                 <ListItem divider key={index.toString()}>

@@ -78,11 +78,7 @@ export default class ShowCocktail extends Component {
       .get(ServerUrl + 'recipe/' + this.state.cocktailID + '/make')
       .then((res) => {
         console.log(res.data);
-        //TODO reroute to "Enjoy your cocktail"
-        // this.props.history.push({
-        //   pathname: '/EnjoyYourCocktail/' + this.state.cocktailID,
-        //   state: { output: res.data },
-        // });
+        //TODO find a way to pass the data NOT in the url
         this.props.history.push({
           pathname: '/EnjoyYourCocktail/' + res.data,
           state: this.state,
@@ -130,11 +126,9 @@ export default class ShowCocktail extends Component {
           <h4 style={{ margin: 8 }}>Ingredients: </h4>
           <List>
             {
-              //TODO add delete ing button
               this.state.ingredients.map((ing, index) => (
                 <ListItem divider key={index}>
                   {ing[0]} {ing[1]} {ing[2] ? '(optional)' : ''}
-                  {/* <Button onClick={this.deleteIngredient}>X</Button> */}
                 </ListItem>
               ))
             }

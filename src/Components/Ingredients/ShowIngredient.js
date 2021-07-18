@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
 import { Bottle } from '../../common/src/Model/InventoryModel/Bottle';
 import BooleanInventoryItem from '../../common/src/Model/InventoryModel/BooleanInventoryItem';

@@ -198,7 +198,7 @@ export default class SimpleTabs extends React.Component {
               <Tab label='Cocktails' {...a11yProps(0)} />
               <Tab label='Inventory' {...a11yProps(1)} />
             </Tabs>
-            <div className={this.classes.search}>
+            {/* <div className={this.classes.search}>
               <div className={this.classes.searchIcon}>
                 <SearchIcon />
               </div>
@@ -211,7 +211,7 @@ export default class SimpleTabs extends React.Component {
                 inputProps={{ 'aria-label': 'search' }}
                 onChange={this.onChangeSearch.bind(this)}
               />
-            </div>
+            </div> */}
           </Toolbar>
         </AppBar>
         <TabPanel value={this.state.value} index={0}>
