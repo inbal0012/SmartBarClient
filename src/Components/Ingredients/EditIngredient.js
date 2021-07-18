@@ -90,7 +90,6 @@ export default class EditIngredient extends Component {
   }
 
   onChangeRemaining(event) {
-    this.validate('remaining', 'Remaining', Number(event.target.value));
     this.setState({
       remaining: event.target.value,
     });
@@ -133,13 +132,6 @@ export default class EditIngredient extends Component {
       isOK = isOK && validation;
     }
     if (!BooleanInventoryItem.isABooleanCategory(this.state.category)) {
-      //remaining
-      validation = this.validate(
-        'remaining',
-        'Remaining',
-        Number(this.state.remaining)
-      );
-      isOK = isOK && validation;
       //minRequired
       validation = this.validate(
         'minRequired',
@@ -149,7 +141,10 @@ export default class EditIngredient extends Component {
       isOK = isOK && validation;
     }
 
-    if (!isOK) return;
+    if (!isOK) {
+      console.log('validation failed');
+      return;
+    }
 
     let updatedIngredient = {
       name: this.state.name,
